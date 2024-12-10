@@ -39,3 +39,8 @@ GitlabApi >> privateToken: anObject [
 	client headerAt: #'PRIVATE-TOKEN' add: anObject. 
 	privateToken := anObject
 ]
+
+{ #category : 'ressources' }
+GitlabApi >> projects [
+	^GitlabProjects new gitlabAPI: self.
+]
