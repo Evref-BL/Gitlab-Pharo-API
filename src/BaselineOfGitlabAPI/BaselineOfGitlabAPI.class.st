@@ -1,6 +1,6 @@
 Class {
 	#name : 'BaselineOfGitlabAPI',
-	#superclass : 'Object',
+	#superclass : 'BaselineOf',
 	#category : 'BaselineOfGitlabAPI',
 	#package : 'BaselineOfGitlabAPI'
 }
