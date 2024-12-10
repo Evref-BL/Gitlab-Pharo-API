@@ -34,3 +34,28 @@ GitlabBranchesTest >> testCreateInProjectFromRef [
 	self assert: (result at: #message) equals: postMessage
 
 ]
+
+{ #category : 'tests' }
+GitlabBranchesTest >> testGetAllFromProject [
+
+	| hostUrl gitlabApi projectId result client branch1 branch2 |
+	
+	"Given"
+	hostUrl := 'www.url.com'.
+	client := Mock new.
+	
+	gitlabApi := GitlabApi new privateToken: 'token'; hostUrl: hostUrl; client: client.
+	
+	branch1 := '{"name": "branch1"}'.
+	branch2 := '{"name": "branch2"}'.
+	projectId := 1.
+	
+	(client stub get: hostUrl, '/projects/', projectId asString, '/repository/branches') willReturn: '[', branch1, ',', branch2, ']'. 
+	
+	"When"
+	result := gitlabApi branches getAllFromProject: projectId.
+	
+	"Then"
+	self assert: result size equals: 2.
+	self assert: (result first at: #name) equals: 'branch1'.
+]
