@@ -17,6 +17,12 @@ GitlabApi >> client [
 ]
 
 { #category : 'accessing' }
+GitlabApi >> client: anObject [
+
+	client := anObject
+]
+
+{ #category : 'accessing' }
 GitlabApi >> hostUrl [
 
 	^ hostUrl
