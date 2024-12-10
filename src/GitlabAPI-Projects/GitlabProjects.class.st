@@ -1,9 +1,6 @@
 Class {
 	#name : 'GitlabProjects',
-	#superclass : 'Object',
-	#instVars : [
-		'gitlabAPI'
-	],
+	#superclass : 'GitlabRessource',
 	#category : 'GitlabAPI-Projects',
 	#package : 'GitlabAPI-Projects'
 }
@@ -21,10 +18,4 @@ GitlabProjects >> get: projectId [
 
 	
 	^NeoJSONReader fromString: response.
-]
-
-{ #category : 'accessing' }
-GitlabProjects >> gitlabAPI: anObject [
-
-	gitlabAPI := anObject
 ]
