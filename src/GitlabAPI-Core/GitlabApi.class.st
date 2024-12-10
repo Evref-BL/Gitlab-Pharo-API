@@ -10,6 +10,11 @@ Class {
 	#package : 'GitlabAPI-Core'
 }
 
+{ #category : 'ressources' }
+GitlabApi >> branches [
+	^GitlabBranches new gitlabAPI: self.
+]
+
 { #category : 'accessing' }
 GitlabApi >> client [
 
