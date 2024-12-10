@@ -18,3 +18,14 @@ GitlabBranches >> create: name inProject: projectId fromRef: ref [
 	
 	^NeoJSONReader fromString: response.
 ]
+
+{ #category : 'api' }
+GitlabBranches >> getAllFromProject: projectId [
+	"https://docs.gitlab.com/ee/api/branches.html#list-repository-branches"
+	| response |
+	response := gitlabAPI client get:
+		  gitlabAPI hostUrl , '/projects/' , projectId asString
+		  , '/repository/branches'.
+		
+	^NeoJSONReader fromString: response.
+]
