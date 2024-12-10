@@ -20,6 +20,10 @@ BaselineOfGitlabAPI >> defineDependencies: spec [
 	spec
 		baseline: 'NeoJSON'
 		with: [ spec repository: 'github://svenvc/NeoJSON/repository' ].
+		
+	spec
+    baseline: 'Mocketry'
+    with: [ spec repository: 'github://dionisiydk/Mocketry' ]
 ]
 
 { #category : 'baselines' }
@@ -30,5 +34,7 @@ BaselineOfGitlabAPI >> defineGroups: spec [
 BaselineOfGitlabAPI >> definePackages: spec [
 
 	spec
-		package: 'GitlabAPI-Core'
+		package: 'GitlabAPI-Core'.
+	spec package: 'GitlabAPI-Projects' with: [ spec requires: #('GitlabAPI-Core') ].
+	spec package: 'GitlabAPI-Projects-Tests' with: [ spec requires: #('GitlabAPI-Projects' 'Mocketry') ]
 ]
