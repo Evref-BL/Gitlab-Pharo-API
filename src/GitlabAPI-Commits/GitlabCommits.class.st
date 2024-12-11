@@ -36,3 +36,10 @@ GitlabCommits >> get: commitSha inProject: projectId [
 	
 	^NeoJSONReader fromString: response.
 ]
+
+{ #category : 'api' }
+GitlabCommits >> getAllInProject: projectId [
+	"https://docs.gitlab.com/ee/api/commits.html#list-repository-commits"
+	
+	^self getAll: '/projects/', projectId asString, '/repository/commits'
+]
