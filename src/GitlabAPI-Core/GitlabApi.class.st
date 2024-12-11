@@ -27,6 +27,11 @@ GitlabApi >> client: anObject [
 	client := anObject
 ]
 
+{ #category : 'ressources' }
+GitlabApi >> commits [
+	^GitlabCommits new gitlabAPI: self.
+]
+
 { #category : 'accessing' }
 GitlabApi >> hostUrl [
 
