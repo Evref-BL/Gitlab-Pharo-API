@@ -74,6 +74,34 @@ GitlabCommitsTest >> testDiffOfInProjectUniDiff [
 ]
 
 { #category : 'tests' }
+GitlabCommitsTest >> testGetAllInProject [
+	| hostUrl gitlabApi result client objectId object endpoint projectId gitlabCommits |
+	
+	"Given"
+	hostUrl := 'https://www.url.com'.
+	client := ZnClient new.
+	
+	gitlabApi := GitlabApi new privateToken: 'token'; hostUrl: hostUrl; client: client.
+	
+	projectId := 1.
+	
+	objectId := 1.
+	object := { #id -> objectId } asDictionary.
+	
+	gitlabCommits := GitlabCommits new gitlabAPI: gitlabApi.
+	
+	endpoint := '/projects/', projectId asString, '/repository/commits'.
+	(gitlabCommits stub getAll: endpoint) willReturn: { object }.
+	
+	"When"
+	result := gitlabCommits getAllInProject: projectId.
+	
+	"Then"
+	self assert: result size equals: 1.
+	self assert: (result first at: #id) equals: objectId.
+]
+
+{ #category : 'tests' }
 GitlabCommitsTest >> testGetInProject [
 
 	| hostUrl gitlabApi projectId result client commitId |
