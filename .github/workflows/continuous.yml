@@ -26,3 +26,6 @@ jobs:
       - run: smalltalkci -s ${{ matrix.smalltalk }}
         shell: bash
         timeout-minutes: 15
+        
+      - name: Coveralls
+        uses: coverallsapp/github-action@v2
