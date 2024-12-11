@@ -5,7 +5,7 @@ Class {
 	#package : 'GitlabAPI-Commits'
 }
 
-{ #category : 'as yet unclassified' }
+{ #category : 'api' }
 GitlabCommits >> diffOf: commitSha inProject: projectId [
 	"https://docs.gitlab.com/ee/api/commits.html#get-the-diff-of-a-commit"
 
