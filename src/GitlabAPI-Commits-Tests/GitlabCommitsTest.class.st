@@ -41,6 +41,39 @@ GitlabCommitsTest >> testDiffOfInProject [
 ]
 
 { #category : 'tests' }
+GitlabCommitsTest >> testDiffOfInProjectUniDiff [
+	| hostUrl gitlabApi projectId result client commitId diffContent1 diff1 diffContent2 diff2 path uniDiff |
+	
+	"Given"
+	hostUrl := 'https://www.url.com'.
+	client := ZnClient new.
+	
+	gitlabApi := GitlabApi new privateToken: 'token'; hostUrl: hostUrl; client: client.
+	
+	commitId:= '1aert14'.
+	projectId := 1.
+	uniDiff := true.
+	
+	diffContent1 := 'diff1'.
+	diff1 := '{ "diff": "', diffContent1 ,'"}'.
+	diffContent2 := 'diff2'.
+	diff2 := '{ "diff": "', diffContent2 ,'" }'.
+	
+	path := hostUrl, '/projects/', projectId asString, '/repository/commits/', commitId, '/diff'.
+	
+	(client stub get: path) willReturn: '[ ', diff1, ',', diff2, ']'.
+	
+	"When"
+	result := gitlabApi commits diffOf: commitId inProject: projectId uniDiff: uniDiff.
+	
+	"Then"
+	self assert: (client request url query at: #unidiff) equals: uniDiff asString.
+	self assert: result size equals: 2.
+	self assert: (result first at: #diff) equals: diffContent1.
+	self assert: (result last at: #diff) equals: diffContent2.
+]
+
+{ #category : 'tests' }
 GitlabCommitsTest >> testGetInProject [
 
 	| hostUrl gitlabApi projectId result client commitId |
