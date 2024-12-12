@@ -52,6 +52,13 @@ GitlabCommits >> getAllInProject: projectId withParams: paramsDict [
 ]
 
 { #category : 'api' }
+GitlabCommits >> getByPage: page perPage: perPage inProject: projectId [
+	"https://docs.gitlab.com/ee/api/commits.html#list-repository-commits"
+	
+	^self getByPage: page perPage: perPage inProject: projectId withParams: Dictionary new.
+]
+
+{ #category : 'api' }
 GitlabCommits >> getByPage: page perPage: perPage inProject: projectId withParams: paramsDict [
 	"https://docs.gitlab.com/ee/api/commits.html#list-repository-commits"
 	
