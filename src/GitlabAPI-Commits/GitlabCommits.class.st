@@ -43,3 +43,10 @@ GitlabCommits >> getAllInProject: projectId [
 	
 	^self getAll: '/projects/', projectId asString, '/repository/commits' withParams: Dictionary new.
 ]
+
+{ #category : 'api' }
+GitlabCommits >> getAllInProject: projectId withParams: paramsDict [
+	"https://docs.gitlab.com/ee/api/commits.html#list-repository-commits"
+	
+	^self getAll: '/projects/', projectId asString, '/repository/commits' withParams: paramsDict.
+]
