@@ -36,3 +36,31 @@ GitlabCommits >> get: commitSha inProject: projectId [
 	
 	^NeoJSONReader fromString: response.
 ]
+
+{ #category : 'api' }
+GitlabCommits >> getAllInProject: projectId [
+	"https://docs.gitlab.com/ee/api/commits.html#list-repository-commits"
+	
+	^self getAllInProject: projectId withParams: Dictionary new.
+]
+
+{ #category : 'api' }
+GitlabCommits >> getAllInProject: projectId withParams: paramsDict [
+	"https://docs.gitlab.com/ee/api/commits.html#list-repository-commits"
+	
+	^self getAll: '/projects/', projectId asString, '/repository/commits' withParams: paramsDict.
+]
+
+{ #category : 'api' }
+GitlabCommits >> getByPage: page perPage: perPage inProject: projectId [
+	"https://docs.gitlab.com/ee/api/commits.html#list-repository-commits"
+	
+	^self getByPage: page perPage: perPage inProject: projectId withParams: Dictionary new.
+]
+
+{ #category : 'api' }
+GitlabCommits >> getByPage: page perPage: perPage inProject: projectId withParams: paramsDict [
+	"https://docs.gitlab.com/ee/api/commits.html#list-repository-commits"
+	
+	^self getByPage: page perPage: perPage from: '/projects/', projectId asString, '/repository/commits'  withParams: paramsDict 
+]
