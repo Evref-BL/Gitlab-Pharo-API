@@ -9,6 +9,46 @@ Class {
 }
 
 { #category : 'tests' }
+GitlabCommitsTest >> testCreateInProjectBranchMessageActions [
+	| hostUrl gitlabApi projectId result client branch message actions endpoint data response gitlabCommits |
+	
+	"Given"
+	hostUrl := 'www.url.com'.
+	client := Mock new.
+	
+	gitlabApi := GitlabApi new privateToken: 'token'; hostUrl: hostUrl; client: client.
+	gitlabCommits := GitlabCommits new gitlabAPI: gitlabApi.
+	
+	projectId := 1.
+	branch := 'branch'.
+	message := 'message'.
+	actions := { 
+		GitlabAction createWithFilePath: 'file.txt' content: 'content' 
+	}.
+	
+	endpoint := '/projects/', projectId asString, '/repository/commits'.
+	
+	data := { 
+		#branch -> branch.
+		#commit_message -> message.
+		#actions -> (actions collect: [ :action | action asDictionary ]).	
+	} asDictionary.
+	
+	
+	response := { 
+		#message -> 'message'
+	} asDictionary.
+	
+	(gitlabCommits stub post: endpoint withData: data) willReturn: response.
+	
+	"When"
+	result := gitlabCommits createInProject: projectId branch: branch  message: message  actions: actions. 
+	
+	"Then"
+	self assert: (result at: #message) equals: (response at: #message).
+]
+
+{ #category : 'tests' }
 GitlabCommitsTest >> testDiffOfInProject [
 
 	| hostUrl gitlabApi projectId result client commitId diffContent1 diff1 diffContent2 diff2 path |
