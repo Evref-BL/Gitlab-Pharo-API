@@ -131,6 +131,38 @@ GitlabCommitsTest >> testGetAllInProjectWithParams [
 ]
 
 { #category : 'tests' }
+GitlabCommitsTest >> testGetByPagePerPageInProjectWithParams [
+
+	| hostUrl gitlabApi result client objectId object endpoint projectId gitlabCommits params page perPage |
+	
+	"Given"
+	hostUrl := 'https://www.url.com'.
+	client := ZnClient new.
+	
+	gitlabApi := GitlabApi new privateToken: 'token'; hostUrl: hostUrl; client: client.
+	
+	projectId := 1.
+	page := 1.
+	perPage := 3.
+	params := { 'param' -> 'value' } asDictionary.
+	
+	objectId := 1.
+	object := { #id -> objectId } asDictionary.
+	
+	gitlabCommits := GitlabCommits new gitlabAPI: gitlabApi.
+	
+	endpoint := '/projects/', projectId asString, '/repository/commits'.
+	(gitlabCommits stub getByPage: page perPage: perPage  from: endpoint withParams: params) willReturn: { object }.
+	
+	"When"
+	result := gitlabCommits getByPage: page perPage: perPage inProject: projectId withParams: params. 
+	
+	"Then"
+	self assert: result size equals: 1.
+	self assert: (result first at: #id) equals: objectId.
+]
+
+{ #category : 'tests' }
 GitlabCommitsTest >> testGetInProject [
 
 	| hostUrl gitlabApi projectId result client commitId |
