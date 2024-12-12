@@ -27,7 +27,7 @@ GitlabThreadPosition class >> createWithBaseSha: baseSha startSha: startSha head
 { #category : 'converting' }
 GitlabThreadPosition >> asDictionary [
 	| dict |
-	dict := OrderedDictionary new.
+	dict := Dictionary new.
 	
 	dict at: 'position[base_sha]' put: baseSha.
 	dict at: 'position[head_sha]' put: headSha.
