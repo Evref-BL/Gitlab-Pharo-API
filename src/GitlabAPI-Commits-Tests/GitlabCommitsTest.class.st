@@ -102,6 +102,36 @@ GitlabCommitsTest >> testGetAllInProject [
 ]
 
 { #category : 'tests' }
+GitlabCommitsTest >> testGetAllInProjectWithParams [
+
+	| hostUrl gitlabApi result client objectId object endpoint projectId gitlabCommits params |
+	
+	"Given"
+	hostUrl := 'https://www.url.com'.
+	client := ZnClient new.
+	
+	gitlabApi := GitlabApi new privateToken: 'token'; hostUrl: hostUrl; client: client.
+	
+	projectId := 1.
+	params := { 'param' -> 'value' } asDictionary.
+	
+	objectId := 1.
+	object := { #id -> objectId } asDictionary.
+	
+	gitlabCommits := GitlabCommits new gitlabAPI: gitlabApi.
+	
+	endpoint := '/projects/', projectId asString, '/repository/commits'.
+	(gitlabCommits stub getAll: endpoint withParams: params) willReturn: { object }.
+	
+	"When"
+	result := gitlabCommits getAllInProject: projectId withParams: params.
+	
+	"Then"
+	self assert: result size equals: 1.
+	self assert: (result first at: #id) equals: objectId.
+]
+
+{ #category : 'tests' }
 GitlabCommitsTest >> testGetInProject [
 
 	| hostUrl gitlabApi projectId result client commitId |
