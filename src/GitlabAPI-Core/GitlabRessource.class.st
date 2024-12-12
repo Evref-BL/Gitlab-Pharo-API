@@ -51,6 +51,19 @@ GitlabRessource >> gitlabAPI: anObject [
 GitlabRessource >> post: endpoint withData: data [
 	| response |
 	gitlabAPI client path: gitlabAPI hostUrl, endpoint.
+	
+	data keysAndValuesDo: [ :key :value | gitlabAPI client queryAt: key put: value ].
+	
+	response := gitlabAPI client post.
+	
+	^NeoJSONReader fromString: response. 
+]
+
+{ #category : 'api' }
+GitlabRessource >> postJson: endpoint withData: data [
+	| response |
+	gitlabAPI client path: gitlabAPI hostUrl, endpoint.
+	
 	gitlabAPI client entity: (ZnEntity with: (NeoJSONWriter toString: data)).
 	gitlabAPI client contentType: 'application/json'.
 	

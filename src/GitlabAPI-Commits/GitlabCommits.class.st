@@ -17,8 +17,8 @@ GitlabCommits >> createInProject: projectId branch: branch message: message acti
 		#commit_message -> message.
 		#actions -> (gitlabActions collect: [:action | action asDictionary])
 	} asDictionary.
-	
-	^self post: endpoint withData: data.
+
+	^self postJson: endpoint withData: data.
 ]
 
 { #category : 'api' }
