@@ -32,6 +32,11 @@ GitlabApi >> commits [
 	^GitlabCommits new gitlabAPI: self.
 ]
 
+{ #category : 'ressources' }
+GitlabApi >> discussions [
+	^GitlabDiscussions new gitlabAPI: self.
+]
+
 { #category : 'accessing' }
 GitlabApi >> hostUrl [
 
