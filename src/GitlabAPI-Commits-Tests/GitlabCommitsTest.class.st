@@ -75,7 +75,7 @@ GitlabCommitsTest >> testDiffOfInProjectUniDiff [
 
 { #category : 'tests' }
 GitlabCommitsTest >> testGetAllInProject [
-	| hostUrl gitlabApi result client objectId object endpoint projectId gitlabCommits |
+	| hostUrl gitlabApi result client objectId object projectId gitlabCommits |
 	
 	"Given"
 	hostUrl := 'https://www.url.com'.
@@ -90,8 +90,7 @@ GitlabCommitsTest >> testGetAllInProject [
 	
 	gitlabCommits := GitlabCommits new gitlabAPI: gitlabApi.
 	
-	endpoint := '/projects/', projectId asString, '/repository/commits'.
-	(gitlabCommits stub getAll: endpoint withParams: Dictionary new) willReturn: { object }.
+	(gitlabCommits stub getAllInProject: projectId withParams: Dictionary new) willReturn: { object }.
 	
 	"When"
 	result := gitlabCommits getAllInProject: projectId.
