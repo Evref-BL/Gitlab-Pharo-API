@@ -69,3 +69,32 @@ GitlabRessourceTest >> testGetByPagePerPageFromWithParams [
 	self assert: result size equals: 1.
 	self assert: (result first at: #id) equals: objectId.
 ]
+
+{ #category : 'tests' }
+GitlabRessourceTest >> testPostWithData [
+	| hostUrl gitlabApi result client endpoint gitlabRessource data responseMessage response |
+	
+	"Given"
+	hostUrl := 'https://www.url.com'.
+	client := ZnClient new.
+	
+	gitlabApi := GitlabApi new privateToken: 'token'; hostUrl: hostUrl; client: client.
+	
+	endpoint := '/endpoint'.
+	data := { 'param' -> 'value' } asDictionary.
+	
+	responseMessage := 'success'.
+	response := '{ "message": "', responseMessage, '" }'.
+	
+	gitlabRessource := GitlabRessource new gitlabAPI: gitlabApi.
+	
+	(client stub post) willReturn: response.
+	
+	"When"
+	result := gitlabRessource post: endpoint withData: data.
+	
+	"Then"
+	self assert: (result at: #message) equals: responseMessage.
+	self assert: (client request entity contentType) asString equals: 'application/json'.
+	self assert: (client request entity string) equals: (NeoJSONWriter toString: data).
+]

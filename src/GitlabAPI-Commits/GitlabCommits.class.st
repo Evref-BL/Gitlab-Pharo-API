@@ -6,6 +6,22 @@ Class {
 }
 
 { #category : 'api' }
+GitlabCommits >> createInProject: projectId branch: branch message: message actions: gitlabActions [ 
+	"https://docs.gitlab.com/ee/api/commits.html#create-a-commit-with-multiple-files-and-actions"
+	
+	| endpoint data |
+	endpoint := '/projects/', projectId asString, '/repository/commits'.
+	
+	data := { 
+		#branch -> branch.
+		#commit_message -> message.
+		#actions -> (gitlabActions collect: [:action | action asDictionary])
+	} asDictionary.
+	
+	^self post: endpoint withData: data.
+]
+
+{ #category : 'api' }
 GitlabCommits >> diffOf: commitSha inProject: projectId [
 	"https://docs.gitlab.com/ee/api/commits.html#get-the-diff-of-a-commit"
 

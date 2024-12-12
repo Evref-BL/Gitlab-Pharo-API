@@ -46,3 +46,15 @@ GitlabRessource >> gitlabAPI: anObject [
 
 	gitlabAPI := anObject
 ]
+
+{ #category : 'api' }
+GitlabRessource >> post: endpoint withData: data [
+	| response |
+	gitlabAPI client path: gitlabAPI hostUrl, endpoint.
+	gitlabAPI client entity: (ZnEntity with: (NeoJSONWriter toString: data)).
+	gitlabAPI client contentType: 'application/json'.
+	
+	response := gitlabAPI client post.
+	
+	^NeoJSONReader fromString: response. 
+]
