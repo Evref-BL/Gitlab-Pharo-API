@@ -91,7 +91,7 @@ GitlabCommitsTest >> testGetAllInProject [
 	gitlabCommits := GitlabCommits new gitlabAPI: gitlabApi.
 	
 	endpoint := '/projects/', projectId asString, '/repository/commits'.
-	(gitlabCommits stub getAll: endpoint) willReturn: { object }.
+	(gitlabCommits stub getAll: endpoint withParams: Dictionary new) willReturn: { object }.
 	
 	"When"
 	result := gitlabCommits getAllInProject: projectId.
