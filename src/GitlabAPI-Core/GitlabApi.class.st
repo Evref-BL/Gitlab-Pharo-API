@@ -59,6 +59,11 @@ GitlabApi >> mergeRequests [
 	^GitlabMergeRequests new gitlabAPI: self.
 ]
 
+{ #category : 'ressources' }
+GitlabApi >> notes [
+	^GitlabNotes new gitlabAPI: self.
+]
+
 { #category : 'accessing' }
 GitlabApi >> privateToken: anObject [ 
 
