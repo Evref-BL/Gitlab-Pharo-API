@@ -5,7 +5,7 @@ Class {
 	#package : 'GitlabAPI-MergeRequests'
 }
 
-{ #category : 'as yet unclassified' }
+{ #category : 'api' }
 GitlabMergeRequests >> diffsOf: mergeRequestIID inProject: projectId [
 	"https://docs.gitlab.com/ee/api/merge_requests.html#list-merge-request-diffs"
 	| endpoint |
