@@ -9,6 +9,45 @@ Class {
 }
 
 { #category : 'tests' }
+GitlabMergeRequestsTest >> testCreateForProjectWithSourceBranchTargetBranchTitle [
+
+	"Given"
+	| hostUrl client gitlabApi gitlabMergeRequests projectId sourceBranch targetBranch title message endpoint data response result |
+	hostUrl := 'www.url.com'.
+	client := Mock new.
+	
+	gitlabApi := GitlabApi new privateToken: 'token'; hostUrl: hostUrl; client: client.
+	gitlabMergeRequests := GitlabMergeRequests new gitlabAPI: gitlabApi.
+	
+	projectId := 1.
+	sourceBranch := 'test'.
+	targetBranch := 'main'.
+	title := 'title'.
+	message := 'message'.
+	
+	endpoint := '/projects/', projectId asString, '/merge_requests'.
+	
+	data := { 
+		#source_branch -> sourceBranch.
+		#target_branch -> targetBranch.
+		#title -> title	
+	} asDictionary.
+	
+	
+	response := { 
+		#message -> message
+	} asDictionary.
+	
+	(gitlabMergeRequests stub post: endpoint withData: data) willReturn: response.
+	
+	"When"
+	result := gitlabMergeRequests createForProject: projectId withSourceBranch: sourceBranch targetBranch: targetBranch title: title.
+	
+	"Then"
+	self assert: (result at: #message) equals: (response at: #message).
+]
+
+{ #category : 'tests' }
 GitlabMergeRequestsTest >> testDiffsOfInProject [
 
 	| hostUrl gitlabApi projectId result client gitlabMergeRequests mergeRequestIID path diff1 diff2 diffs |
