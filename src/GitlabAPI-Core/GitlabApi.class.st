@@ -54,6 +54,11 @@ GitlabApi >> initialize [
 	client := (ZnClient new accept: ZnMimeType applicationJson; yourself)
 ]
 
+{ #category : 'ressources' }
+GitlabApi >> mergeRequests [
+	^GitlabMergeRequests new gitlabAPI: self.
+]
+
 { #category : 'accessing' }
 GitlabApi >> privateToken: anObject [ 
 
