@@ -9,6 +9,20 @@ Class {
 }
 
 { #category : 'api' }
+GitlabRessource >> get: endpoint withParams: paramsDict [
+	| response |
+	
+	gitlabAPI client path: gitlabAPI hostUrl, endpoint.
+	paramsDict keysAndValuesDo: [ :key :value | gitlabAPI client queryAt: key put: value ].
+	
+	response := gitlabAPI client get.
+	
+	^NeoJSONReader fromString: response. 
+	
+	
+]
+
+{ #category : 'api' }
 GitlabRessource >> getAll: endpoint withParams: paramsDict [
 	| currentPage results |
 	currentPage := 1.
