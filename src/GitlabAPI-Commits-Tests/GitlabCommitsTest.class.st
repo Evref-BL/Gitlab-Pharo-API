@@ -39,7 +39,7 @@ GitlabCommitsTest >> testCreateInProjectBranchMessageActions [
 		#message -> 'message'
 	} asDictionary.
 	
-	(gitlabCommits stub post: endpoint withData: data) willReturn: response.
+	(gitlabCommits stub postJson: endpoint withData: data) willReturn: response.
 	
 	"When"
 	result := gitlabCommits createInProject: projectId branch: branch  message: message  actions: actions. 
