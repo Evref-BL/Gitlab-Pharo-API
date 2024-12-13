@@ -52,7 +52,10 @@ BaselineOfGitlabAPI >> definePackages: spec [
 	spec package: 'GitlabAPI-MergeRequests-Tests' with: [ spec requires: #('GitlabAPI-MergeRequests' 'Mocketry') ].
 	
 	spec package: 'GitlabAPI-Notes' with: [ spec requires: #('GitlabAPI-Core') ].
-	spec package: 'GitlabAPI-Notes-Tests' with: [ spec requires: #('GitlabAPI-Notes' 'Mocketry') ]
+	spec package: 'GitlabAPI-Notes-Tests' with: [ spec requires: #('GitlabAPI-Notes' 'Mocketry') ].
+	
+	spec package: 'GitlabAPI-Repositories' with: [ spec requires: #('GitlabAPI-Core') ].
+	spec package: 'GitlabAPI-Repositories-Tests' with: [ spec requires: #('GitlabAPI-Repositories' 'Mocketry') ]
 	
 
 ]

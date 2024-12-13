@@ -75,3 +75,8 @@ GitlabApi >> privateToken: anObject [
 GitlabApi >> projects [
 	^GitlabProjects new gitlabAPI: self.
 ]
+
+{ #category : 'ressources' }
+GitlabApi >> repositories [
+	^GitlabRepositories new gitlabAPI: self.
+]
