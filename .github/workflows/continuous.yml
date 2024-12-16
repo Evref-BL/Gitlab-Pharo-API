@@ -8,12 +8,11 @@ on:
     branches:
       - main
       - develop
+      - ci-add-coverage
   pull_request:
     branches:
       - main
       - develop
-      - ci-add-coverage
-
 jobs:
   build:
     runs-on: ubuntu-latest
