@@ -35,6 +35,7 @@ BaselineOfGitlabAPI >> definePackages: spec [
 
 	spec
 		package: 'GitlabAPI-Core'.
+	spec package: 'GitlabAPI-Core-Tests' with: [ spec requires: #('GitlabAPI-Core' 'Mocketry') ].
 		
 	spec package: 'GitlabAPI-Projects' with: [ spec requires: #('GitlabAPI-Core') ].
 	spec package: 'GitlabAPI-Projects-Tests' with: [ spec requires: #('GitlabAPI-Projects' 'Mocketry') ].
