@@ -6,6 +6,21 @@ Class {
 }
 
 { #category : 'api' }
+GitlabRepositories >> compareInProject: projectId from: fromSHA to: toSHA [
+	"https://docs.gitlab.com/ee/api/repositories.html#compare-branches-tags-or-commits"
+	
+	| endpoint params |
+	endpoint := '/projects/', projectId asString, '/repository/compare'.
+	
+	params := { 
+		#from -> fromSHA.
+		#to  -> toSHA
+	} asDictionary.
+	
+	^self get: endpoint withParams: params. 
+]
+
+{ #category : 'api' }
 GitlabRepositories >> getRawFile: filePath ofProject: projectId [
 	"https://docs.gitlab.com/ee/api/repository_files.html#get-raw-file-from-repository"
 	

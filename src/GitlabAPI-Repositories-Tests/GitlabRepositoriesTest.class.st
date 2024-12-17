@@ -9,6 +9,42 @@ Class {
 }
 
 { #category : 'tests' }
+GitlabRepositoriesTest >> testCompareInProjectFromTo [
+
+
+	| hostUrl gitlabApi projectId result client path gitlabRepositories from to params response |
+	
+	"Given"
+	hostUrl := 'www.url.com'.
+	client := ZnClient new.
+	
+	gitlabApi := GitlabApi new privateToken: 'token'; hostUrl: hostUrl; client: client.
+	gitlabRepositories := GitlabRepositories new gitlabAPI: gitlabApi.
+	
+	projectId := 1.
+	from := 'azfo334'.
+	to := 'fjfdiez3450'.
+	
+	params := { 
+		#from -> from.
+		#to -> to
+	} asDictionary.
+	
+	response := { 
+	  #diffs -> 'diffs'
+	} asDictionary. 
+	
+	path := '/projects/', projectId asString, '/repository/compare'.
+	(gitlabRepositories stub get: path withParams: params) willReturn: response.
+	
+	"When"
+	result := gitlabRepositories compareInProject: projectId from: from to: to. 
+	
+	"Then"
+	self assert: result equals: response.
+]
+
+{ #category : 'tests' }
 GitlabRepositoriesTest >> testGetRawFileOfProject [
 
 	| hostUrl gitlabApi projectId result client path gitlabRepositories filePath response |
