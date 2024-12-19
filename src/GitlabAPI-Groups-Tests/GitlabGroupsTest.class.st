@@ -20,7 +20,7 @@ GitlabGroupsTest >> testGet [
 	gitlabApi := GitlabApi new privateToken: 'token'; hostUrl: hostUrl; client: client.
 	gitlabGroups := GitlabGroups new gitlabAPI: gitlabApi.
 	
-	groupId := 4.  
+	groupId := 5.  
 	
 	group := { 
 		#id -> groupId 
