@@ -37,6 +37,11 @@ GitlabApi >> discussions [
 	^GitlabDiscussions new gitlabAPI: self.
 ]
 
+{ #category : 'ressources' }
+GitlabApi >> groups [
+	^GitlabGroups new gitlabAPI: self.
+]
+
 { #category : 'accessing' }
 GitlabApi >> hostUrl [
 
