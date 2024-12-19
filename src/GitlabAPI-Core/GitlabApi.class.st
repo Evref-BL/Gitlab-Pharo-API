@@ -69,6 +69,11 @@ GitlabApi >> notes [
 	^GitlabNotes new gitlabAPI: self.
 ]
 
+{ #category : 'ressources' }
+GitlabApi >> pipelines [
+	^GitlabPipelines new gitlabAPI: self.
+]
+
 { #category : 'accessing' }
 GitlabApi >> privateToken: anObject [ 
 
