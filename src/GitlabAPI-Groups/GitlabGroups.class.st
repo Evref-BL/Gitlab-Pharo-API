@@ -5,7 +5,7 @@ Class {
 	#package : 'GitlabAPI-Groups'
 }
 
-{ #category : 'private - requesting' }
+{ #category : 'api' }
 GitlabGroups >> get: groupId [
 	"https://docs.gitlab.com/ee/api/groups.html#get-a-single-group"
 	
@@ -13,4 +13,14 @@ GitlabGroups >> get: groupId [
 	endpoint := '/groups/', groupId asString.
 	
 	^self get: endpoint withParams: Dictionary new. 
+]
+
+{ #category : 'api' }
+GitlabGroups >> getByPage: page perPage: perPage withParams: params [
+	"https://docs.gitlab.com/ee/api/groups.html#list-all-groups"
+	
+	| endpoint |
+	endpoint := '/groups'.
+	
+	^self getByPage: page perPage: perPage from: endpoint withParams: params.
 ]

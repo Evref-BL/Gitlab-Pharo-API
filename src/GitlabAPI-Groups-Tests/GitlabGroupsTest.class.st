@@ -35,3 +35,34 @@ GitlabGroupsTest >> testGet [
 	"Then"
 	self assert: (result at: #id) equals: groupId.
 ]
+
+{ #category : 'tests' }
+GitlabGroupsTest >> testGetByPagePerPageWithParams [
+	
+	| hostUrl gitlabApi result client object endpoint params page perPage objects gitlabGroups |
+	
+	"Given"
+	hostUrl := 'https://www.url.com'.
+	client := ZnClient new.
+	
+	gitlabApi := GitlabApi new privateToken: 'token'; hostUrl: hostUrl; client: client.
+	
+	page := 1.
+	perPage := 3.
+	params := { 'param' -> 'value' } asDictionary.
+	
+	object := { #id -> 4 } asDictionary.
+	objects := { object }.
+	
+	gitlabGroups := GitlabGroups new gitlabAPI: gitlabApi.
+	
+	endpoint := '/groups'.
+	(gitlabGroups stub getByPage: page perPage: perPage from: endpoint withParams: params) willReturn: objects.
+	
+	"When"
+	result := gitlabGroups getByPage: page perPage: perPage withParams: params. 
+	
+	"Then"
+	self assert: result size equals: 1.
+	self assert: result first equals: object.
+]
