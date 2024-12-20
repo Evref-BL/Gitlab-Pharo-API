@@ -52,7 +52,7 @@ GitlabGroupsTest >> testGetAll [
 	gitlabGroups := GitlabGroups new gitlabAPI: gitlabApi.
 	
 	endpoint := '/groups'.
-	(gitlabGroups stub getAll: endpoint withParams: Dictionary new) willReturn: objects.
+	(gitlabGroups stub getAllWithParams: Dictionary new) willReturn: objects.
 	
 	"When"
 	result := gitlabGroups getAll.
@@ -119,5 +119,62 @@ GitlabGroupsTest >> testGetByPagePerPageWithParams [
 	
 	"Then"
 	self assert: result size equals: 1.
+	self assert: result first equals: object.
+]
+
+{ #category : 'tests' }
+GitlabGroupsTest >> testSubgroupsOf [
+
+	| hostUrl gitlabApi result client object objects gitlabGroups groupId |
+	
+	"Given"
+	hostUrl := 'https://www.url.com'.
+	client := ZnClient new.
+	
+	gitlabApi := GitlabApi new privateToken: 'token'; hostUrl: hostUrl; client: client.
+	
+	object := { #id -> 4 } asDictionary.
+	objects := { object }.
+	
+	groupId := 4.
+	gitlabGroups := GitlabGroups new gitlabAPI: gitlabApi.
+	
+	(gitlabGroups stub subgroupsOf: groupId withParams: Dictionary new) willReturn: objects.
+	
+	"When"
+	result := gitlabGroups subgroupsOf: groupId.
+	
+	"Then"
+	self assert: result size equals: objects size.
+	self assert: result first equals: object.
+]
+
+{ #category : 'tests' }
+GitlabGroupsTest >> testSubgroupsOfWithParams [
+
+	| hostUrl gitlabApi result client object endpoint params objects gitlabGroups groupId |
+	
+	"Given"
+	hostUrl := 'https://www.url.com'.
+	client := ZnClient new.
+	
+	gitlabApi := GitlabApi new privateToken: 'token'; hostUrl: hostUrl; client: client.
+	
+	params := { 'param' -> 'value' } asDictionary.
+	
+	object := { #id -> 4 } asDictionary.
+	objects := { object }.
+	
+	groupId := 4.
+	gitlabGroups := GitlabGroups new gitlabAPI: gitlabApi.
+	
+	endpoint := '/groups/', groupId asString, '/subgroups'.
+	(gitlabGroups stub getAll: endpoint withParams: params) willReturn: objects.
+	
+	"When"
+	result := gitlabGroups subgroupsOf: groupId withParams: params.
+	
+	"Then"
+	self assert: result size equals: objects size.
 	self assert: result first equals: object.
 ]
