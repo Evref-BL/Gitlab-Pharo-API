@@ -37,6 +37,61 @@ GitlabGroupsTest >> testGet [
 ]
 
 { #category : 'tests' }
+GitlabGroupsTest >> testGetAll [
+	| hostUrl gitlabApi result client object endpoint objects gitlabGroups |
+	
+	"Given"
+	hostUrl := 'https://www.url.com'.
+	client := ZnClient new.
+	
+	gitlabApi := GitlabApi new privateToken: 'token'; hostUrl: hostUrl; client: client.
+	
+	object := { #id -> 4 } asDictionary.
+	objects := { object }.
+	
+	gitlabGroups := GitlabGroups new gitlabAPI: gitlabApi.
+	
+	endpoint := '/groups'.
+	(gitlabGroups stub getAll: endpoint withParams: Dictionary new) willReturn: objects.
+	
+	"When"
+	result := gitlabGroups getAll.
+	
+	"Then"
+	self assert: result size equals: objects size.
+	self assert: result first equals: object.
+]
+
+{ #category : 'tests' }
+GitlabGroupsTest >> testGetAllWithParams [
+
+	| hostUrl gitlabApi result client object endpoint params objects gitlabGroups |
+	
+	"Given"
+	hostUrl := 'https://www.url.com'.
+	client := ZnClient new.
+	
+	gitlabApi := GitlabApi new privateToken: 'token'; hostUrl: hostUrl; client: client.
+	
+	params := { 'param' -> 'value' } asDictionary.
+	
+	object := { #id -> 4 } asDictionary.
+	objects := { object }.
+	
+	gitlabGroups := GitlabGroups new gitlabAPI: gitlabApi.
+	
+	endpoint := '/groups'.
+	(gitlabGroups stub getAll: endpoint withParams: params) willReturn: objects.
+	
+	"When"
+	result := gitlabGroups getAllWithParams: params.
+	
+	"Then"
+	self assert: result size equals: objects size.
+	self assert: result first equals: object.
+]
+
+{ #category : 'tests' }
 GitlabGroupsTest >> testGetByPagePerPageWithParams [
 	
 	| hostUrl gitlabApi result client object endpoint params page perPage objects gitlabGroups |
