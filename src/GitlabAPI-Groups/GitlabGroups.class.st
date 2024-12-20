@@ -41,3 +41,19 @@ GitlabGroups >> getByPage: page perPage: perPage withParams: params [
 	
 	^self getByPage: page perPage: perPage from: endpoint withParams: params.
 ]
+
+{ #category : 'api - subgroups' }
+GitlabGroups >> subgroupsOf: groupId [
+	"https://docs.gitlab.com/ee/api/groups.html#list-subgroups"
+	^self subgroupsOf: groupId withParams: Dictionary new.
+]
+
+{ #category : 'api - subgroups' }
+GitlabGroups >> subgroupsOf: groupId withParams: params [
+	"https://docs.gitlab.com/ee/api/groups.html#list-subgroups"
+	
+	| endpoint |
+	endpoint := '/groups/', groupId asString, '/subgroups'.
+	
+	^self getAll: endpoint withParams: params.
+]
