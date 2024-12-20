@@ -16,6 +16,23 @@ GitlabGroups >> get: groupId [
 ]
 
 { #category : 'api' }
+GitlabGroups >> getAll [
+	"https://docs.gitlab.com/ee/api/groups.html#list-all-groups"
+	
+	^self getAllWithParams: Dictionary new.
+]
+
+{ #category : 'api' }
+GitlabGroups >> getAllWithParams: params [
+	"https://docs.gitlab.com/ee/api/groups.html#list-all-groups"
+	
+	| endpoint |
+	endpoint := '/groups'.
+	
+	^self getAll: endpoint withParams: params 
+]
+
+{ #category : 'api' }
 GitlabGroups >> getByPage: page perPage: perPage withParams: params [
 	"https://docs.gitlab.com/ee/api/groups.html#list-all-groups"
 	
