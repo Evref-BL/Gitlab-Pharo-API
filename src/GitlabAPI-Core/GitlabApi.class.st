@@ -60,6 +60,11 @@ GitlabApi >> initialize [
 ]
 
 { #category : 'ressources' }
+GitlabApi >> jobs [
+	^GitlabJobs new gitlabAPI: self.
+]
+
+{ #category : 'ressources' }
 GitlabApi >> mergeRequests [
 	^GitlabMergeRequests new gitlabAPI: self.
 ]
