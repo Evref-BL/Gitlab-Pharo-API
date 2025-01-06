@@ -5,6 +5,16 @@ Class {
 	#package : 'GitlabAPI-Projects'
 }
 
+{ #category : 'api' }
+GitlabProjects >> allWithParams: paramsDict [
+	"https://docs.gitlab.com/ee/api/projects.html#list-all-projects"
+	
+	| endpoint |
+	endpoint := '/projects'.
+	
+	^self getAll: endpoint withParams: paramsDict. 
+]
+
 { #category : 'private' }
 GitlabProjects >> basePath [
 	^ gitlabAPI hostUrl, '/projects/' 
