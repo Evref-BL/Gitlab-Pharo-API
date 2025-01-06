@@ -95,3 +95,8 @@ GitlabApi >> projects [
 GitlabApi >> repositories [
 	^GitlabRepositories new gitlabAPI: self.
 ]
+
+{ #category : 'ressources' }
+GitlabApi >> users [
+	^GitlabUsers new gitlabAPI: self.
+]
