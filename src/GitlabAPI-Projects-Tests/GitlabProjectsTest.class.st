@@ -40,23 +40,29 @@ GitlabProjectsTest >> testAllWithParams [
 { #category : 'tests' }
 GitlabProjectsTest >> testGet [
 
+	| hostUrl gitlabApi result client objectId object endpoint gitlabProjects projectId |
+	
 	"Given"
-	| project client gitlabApi result hostUrl projectId |
-	hostUrl := 'www.url.com'.
-	projectId := 1.
+	hostUrl := 'https://www.url.com'.
+	client := ZnClient new.
 	
-	project := '{ "name": "test", "id":', projectId asString, '}'.
-	client := Mock new.
+	gitlabApi := GitlabApi new privateToken: 'token'; hostUrl: hostUrl; client: client.
 	
-	gitlabApi := GitlabApi new privateToken: 'privateToken'; hostUrl: hostUrl; client: client.
+	projectId := 4.
 	
-	(client stub get: hostUrl, '/projects/', projectId asString) willReturn: project.
-
+	objectId := 1.
+	object := { #id -> objectId } asDictionary.
+	
+	gitlabProjects := GitlabProjects new gitlabAPI: gitlabApi.
+	
+	endpoint := '/projects/', projectId asString.
+	(gitlabProjects stub get: endpoint withParams: Dictionary new) willReturn: { object }.
 	
 	"When"
-	result := gitlabApi projects get: projectId.
+	result := gitlabProjects get: projectId.
 	
 	"Then"
-	self assert: (result at: #id) equals: projectId
+	self assert: result size equals: 1.
+	self assert: (result first at: #id) equals: objectId.
 	
 ]

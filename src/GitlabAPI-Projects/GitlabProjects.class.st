@@ -23,9 +23,8 @@ GitlabProjects >> basePath [
 { #category : 'api' }
 GitlabProjects >> get: projectId [
 	"https://docs.gitlab.com/ee/api/projects.html#get-single-project"
-	| response |
-	response := gitlabAPI client get: self basePath, projectId asString.
+	| endpoint |
+	endpoint := '/projects/', projectId asString.
 
-	
-	^NeoJSONReader fromString: response.
+	^self get: endpoint withParams: Dictionary new.
 ]
