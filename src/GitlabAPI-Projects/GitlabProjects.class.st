@@ -5,6 +5,16 @@ Class {
 	#package : 'GitlabAPI-Projects'
 }
 
+{ #category : 'api' }
+GitlabProjects >> allWithParams: paramsDict [
+	"https://docs.gitlab.com/ee/api/projects.html#list-all-projects"
+	
+	| endpoint |
+	endpoint := '/projects'.
+	
+	^self getAll: endpoint withParams: paramsDict. 
+]
+
 { #category : 'private' }
 GitlabProjects >> basePath [
 	^ gitlabAPI hostUrl, '/projects/' 
@@ -13,9 +23,8 @@ GitlabProjects >> basePath [
 { #category : 'api' }
 GitlabProjects >> get: projectId [
 	"https://docs.gitlab.com/ee/api/projects.html#get-single-project"
-	| response |
-	response := gitlabAPI client get: self basePath, projectId asString.
+	| endpoint |
+	endpoint := '/projects/', projectId asString.
 
-	
-	^NeoJSONReader fromString: response.
+	^self get: endpoint withParams: Dictionary new.
 ]
