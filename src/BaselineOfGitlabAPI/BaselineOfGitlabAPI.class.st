@@ -65,8 +65,8 @@ BaselineOfGitlabAPI >> definePackages: spec [
 	spec package: 'GitlabAPI-Pipelines-Tests' with: [ spec requires: #('GitlabAPI-Pipelines' 'Mocketry') ].
 	
 	spec package: 'GitlabAPI-Jobs' with: [ spec requires: #('GitlabAPI-Core') ].
-	spec package: 'GitlabAPI-Jobs-Tests' with: [ spec requires: #('GitlabAPI-Jobs' 'Mocketry') ]
-	
-	
-
+	spec package: 'GitlabAPI-Jobs-Tests' with: [ spec requires: #('GitlabAPI-Jobs' 'Mocketry')].
+		
+	spec package: 'GitlabAPI-Users' with: [ spec requires: #('GitlabAPI-Core') ].
+	spec package: 'GitlabAPI-Users-Tests' with: [ spec requires: #('GitlabAPI-Users' 'Mocketry') ]
 ]
