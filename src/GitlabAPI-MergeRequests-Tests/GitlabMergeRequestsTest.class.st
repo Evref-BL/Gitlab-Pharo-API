@@ -9,6 +9,36 @@ Class {
 }
 
 { #category : 'tests' }
+GitlabMergeRequestsTest >> testCommitsOfInProject [
+
+	| hostUrl gitlabApi result client objectId object endpoint projectId mergeRequestId gitlabMergeRequests |
+	
+	"Given"
+	hostUrl := 'https://www.url.com'.
+	client := ZnClient new.
+	
+	gitlabApi := GitlabApi new privateToken: 'token'; hostUrl: hostUrl; client: client.
+	
+	projectId := 1.
+	mergeRequestId := 24.
+	
+	objectId := 1.
+	object := { #id -> objectId } asDictionary.
+	
+	gitlabMergeRequests := GitlabMergeRequests new gitlabAPI: gitlabApi.
+	
+	endpoint := '/projects/', projectId asString, '/merge_requests/', mergeRequestId asString, '/commits'.
+	(gitlabMergeRequests stub getAll: endpoint withParams: Dictionary new) willReturn: { object }.
+	
+	"When"
+	result := gitlabMergeRequests commitsOf: mergeRequestId inProject: projectId.
+	
+	"Then"
+	self assert: result size equals: 1.
+	self assert: (result first at: #id) equals: objectId.
+]
+
+{ #category : 'tests' }
 GitlabMergeRequestsTest >> testCreateForProjectWithSourceBranchTargetBranchTitle [
 
 	"Given"
