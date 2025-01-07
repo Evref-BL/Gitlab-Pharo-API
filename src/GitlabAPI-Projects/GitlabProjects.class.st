@@ -15,9 +15,14 @@ GitlabProjects >> allWithParams: paramsDict [
 	^self getAll: endpoint withParams: paramsDict. 
 ]
 
-{ #category : 'private' }
-GitlabProjects >> basePath [
-	^ gitlabAPI hostUrl, '/projects/' 
+{ #category : 'api' }
+GitlabProjects >> contributedProjectsOfUser: userId withParams: paramsDict [
+	"https://docs.gitlab.com/ee/api/projects.html#list-projects-a-user-has-contributed-to"
+
+	| endpoint |
+	endpoint := '/users/', userId asString, '/contributed_projects'.
+	
+	^self getAll: endpoint withParams: paramsDict. 
 ]
 
 { #category : 'api' }
