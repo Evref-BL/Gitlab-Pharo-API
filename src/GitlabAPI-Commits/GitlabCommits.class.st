@@ -25,22 +25,23 @@ GitlabCommits >> createInProject: projectId branch: branch message: message acti
 GitlabCommits >> diffOf: commitSha inProject: projectId [
 	"https://docs.gitlab.com/ee/api/commits.html#get-the-diff-of-a-commit"
 
-	| response |
-	response := gitlabAPI client get: gitlabAPI hostUrl, '/projects/', projectId asString, '/repository/commits/', commitSha, '/diff'.
+	| endpoint |
+	endpoint := '/projects/', projectId asString, '/repository/commits/', commitSha, '/diff'.
 	
-	^NeoJSONReader fromString: response. 
+	^self get: endpoint withParams: Dictionary new.
 ]
 
 { #category : 'api' }
 GitlabCommits >> diffOf: commitSha inProject: projectId uniDiff: unidiff [
 	"https://docs.gitlab.com/ee/api/commits.html#get-the-diff-of-a-commit"
-
-	| response path |
-	path := gitlabAPI hostUrl, '/projects/', projectId asString, '/repository/commits/', commitSha, '/diff'.
-	gitlabAPI client queryAt: #unidiff put: unidiff.
+	| endpoint params |
+	endpoint := '/projects/', projectId asString, '/repository/commits/', commitSha, '/diff'.
 	
-	response := gitlabAPI client get: path.
-	^NeoJSONReader fromString: response. 
+	params := { 
+		#unidiff -> unidiff
+	} asDictionary.
+	
+	^self get: endpoint withParams: params. 
 ]
 
 { #category : 'api' }
