@@ -21,11 +21,9 @@ GitlabBranches >> create: name inProject: projectId fromRef: ref [
 
 { #category : 'api' }
 GitlabBranches >> getAllFromProject: projectId [
-	"https://docs.gitlab.com/ee/api/branches.html#list-repository-branches"
-	| response |
-	response := gitlabAPI client get:
-		  gitlabAPI hostUrl , '/projects/' , projectId asString
-		  , '/repository/branches'.
+	"https://docs.gitlab.com/ee/api/branches.html#list-repository-branches"	
+	| endpoint |
+	endpoint := '/projects/', projectId asString, '/repository/branches'.
 		
-	^NeoJSONReader fromString: response.
+	^self getAll: endpoint withParams: Dictionary new.
 ]
