@@ -39,6 +39,37 @@ GitlabRessourceTest >> testGetAllWithParams [
 ]
 
 { #category : 'tests' }
+GitlabRessourceTest >> testGetAllWithParamsJSONOutput [
+	| hostUrl gitlabApi result client objectId object endpoint gitlabRessource params jsonObject |
+	
+	"Given"
+	hostUrl := 'https://www.url.com'.
+	client := ZnClient new.
+	
+	gitlabApi := GitlabApi new privateToken: 'token'; hostUrl: hostUrl; client: client; output: 'json'.
+	
+	endpoint := '/endpoint'.
+	params := { 'param' -> 'value' } asDictionary.
+	
+	objectId := 1.
+	object := { #id -> objectId } asDictionary.
+	jsonObject := NeoJSONWriter toString: { object }.
+	
+	gitlabRessource := GitlabRessource new gitlabAPI: gitlabApi.
+	
+	(gitlabRessource stub getByPage: 1 perPage: 20 from: endpoint withParams: params) willReturn: jsonObject.
+	(gitlabRessource stub getByPage: 2 perPage: 20 from: endpoint withParams: params) willReturn:  jsonObject.
+	(gitlabRessource stub getByPage: 3 perPage: 20 from: endpoint withParams: params) willReturn: '[]'.
+	
+	"When"
+	result := gitlabRessource getAll: endpoint withParams: params.
+	
+	"Then"
+	self assert: result size equals: 2.
+	self assert: (result first) equals: jsonObject.
+]
+
+{ #category : 'tests' }
 GitlabRessourceTest >> testGetByPagePerPageFromWithParams [
 
 	| hostUrl gitlabApi result client objectId object page perPage endpoint params |
@@ -95,6 +126,34 @@ GitlabRessourceTest >> testGetWithParams [
 	
 	"Then"
 	self assert: result equals: object.
+	params keysAndValuesDo: [ :key :value | self assert: (client request url query at: key) equals: value ].
+]
+
+{ #category : 'tests' }
+GitlabRessourceTest >> testGetWithParamsJSONOutput [
+
+	| hostUrl gitlabApi result client object endpoint gitlabRessource params |
+	
+	"Given"
+	hostUrl := 'https://www.url.com'.
+	client := ZnClient new.
+	
+	gitlabApi := GitlabApi new privateToken: 'token'; hostUrl: hostUrl; client: client; output: 'json'.
+	
+	endpoint := '/endpoint'.
+	params := { 'param' -> 'value' } asDictionary.
+	
+	object := { #id -> 1 } asDictionary.
+	
+	gitlabRessource := GitlabRessource new gitlabAPI: gitlabApi.
+	
+	(client stub get) willReturn: (NeoJSONWriter toString: object).
+	
+	"When"
+	result := gitlabRessource get: endpoint withParams: params.
+	
+	"Then"
+	self assert: result equals: (NeoJSONWriter toString: object).
 	params keysAndValuesDo: [ :key :value | self assert: (client request url query at: key) equals: value ].
 ]
 

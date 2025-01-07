@@ -4,7 +4,8 @@ Class {
 	#instVars : [
 		'client',
 		'hostUrl',
-		'privateToken'
+		'privateToken',
+		'output'
 	],
 	#category : 'GitlabAPI-Core',
 	#package : 'GitlabAPI-Core'
@@ -72,6 +73,18 @@ GitlabApi >> mergeRequests [
 { #category : 'ressources' }
 GitlabApi >> notes [
 	^GitlabNotes new gitlabAPI: self.
+]
+
+{ #category : 'accessing' }
+GitlabApi >> output [
+
+	^ output
+]
+
+{ #category : 'accessing' }
+GitlabApi >> output: anObject [
+
+	output := anObject
 ]
 
 { #category : 'ressources' }

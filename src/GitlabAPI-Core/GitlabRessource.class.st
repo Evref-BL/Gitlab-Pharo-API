@@ -17,6 +17,8 @@ GitlabRessource >> get: endpoint withParams: paramsDict [
 	
 	response := gitlabAPI client get.
 	
+	gitlabAPI output = 'json' ifTrue: [ ^response ].
+	
 	^NeoJSONReader fromString: response. 
 	
 	
@@ -31,28 +33,26 @@ GitlabRessource >> getAll: endpoint withParams: paramsDict [
 	[ 
 	|response|
 		response := self getByPage: currentPage perPage: 20 from: endpoint withParams: paramsDict.
-		results addAll: response.
+		(response isEmpty or: response = '[]')ifTrue: [ ^results ].
+		
+		gitlabAPI output = 'json' ifTrue: [ results add: response ] ifFalse: [ results addAll: response ].
 		currentPage := currentPage + 1.
 		
-		response isEmpty
-	] whileFalse.
-
-	^results
+		true.
+	] whileTrue.
 	
 ]
 
 { #category : 'api' }
 GitlabRessource >> getByPage: page perPage: perPage from: endpoint withParams: paramsDict [
-	| response |
-	gitlabAPI client path: gitlabAPI hostUrl, endpoint.
-	gitlabAPI client queryAt: #page put: page.
-	gitlabAPI client queryAt: #per_page put: perPage.
+	| newParams |
+	newParams := Dictionary new.
+	newParams at: #page put: page.
+	newParams at: #per_page put: perPage.
 	
-	paramsDict keysAndValuesDo: [ :key :value | gitlabAPI client queryAt: key put: value ].
+	paramsDict keysAndValuesDo: [ :key :value | newParams at: key put: value ].
 	
-	response := gitlabAPI client get.
-	
-	^NeoJSONReader fromString: response. 
+	^self get: endpoint withParams: newParams. 
 ]
 
 { #category : 'accessing' }
