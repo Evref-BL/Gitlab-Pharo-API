@@ -70,6 +70,35 @@ GitlabMergeRequestsTest >> testAllOfProjectWithParams [
 ]
 
 { #category : 'tests' }
+GitlabMergeRequestsTest >> testApprovalsOfInProject [
+
+	| hostUrl gitlabApi projectId result client gitlabMergeRequests mergeRequestIID path mergeRequest |
+	
+	"Given"
+	hostUrl := 'www.url.com'.
+	client := ZnClient new.
+	
+	gitlabApi := GitlabApi new privateToken: 'token'; hostUrl: hostUrl; client: client.
+	gitlabMergeRequests := GitlabMergeRequests new gitlabAPI: gitlabApi.
+	
+	mergeRequestIID := 24.
+	projectId := 1.
+	
+	mergeRequest := { 
+		#id -> mergeRequestIID 
+	} asDictionary.
+	
+	path := '/projects/', projectId asString, '/merge_requests/', mergeRequestIID asString, '/approvals'.
+	(gitlabMergeRequests stub get: path withParams: Dictionary new) willReturn: mergeRequest.
+	
+	"When"
+	result := gitlabMergeRequests approvalsOf: mergeRequestIID inProject: projectId. 
+	
+	"Then"
+	self assert: (result at: #id) equals: mergeRequestIID.
+]
+
+{ #category : 'tests' }
 GitlabMergeRequestsTest >> testCommitsOfInProject [
 
 	| hostUrl gitlabApi result client objectId object endpoint projectId mergeRequestId gitlabMergeRequests |
