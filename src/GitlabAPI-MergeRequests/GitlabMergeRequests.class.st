@@ -25,6 +25,16 @@ GitlabMergeRequests >> allOfProject: projectId withParams: paramsDict [
 	^self getAll: endpoint withParams: paramsDict.
 ]
 
+{ #category : 'api - approvals' }
+GitlabMergeRequests >> approvalsOf: mergeRequestIID inProject: projectId [
+	"https://docs.gitlab.com/ee/api/merge_request_approvals.html#merge-request-level-mr-approvals"
+	
+	| endpoint |
+	endpoint := '/projects/', projectId asString, '/merge_requests/', mergeRequestIID asString, '/approvals'.
+	
+	^self get: endpoint withParams: Dictionary new.
+]
+
 { #category : 'api' }
 GitlabMergeRequests >> commitsOf: mergeRequestIID inProject: projectId [
 	"https://docs.gitlab.com/ee/api/merge_requests.html#get-single-merge-request-commits"
