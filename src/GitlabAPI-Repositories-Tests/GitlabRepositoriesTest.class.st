@@ -101,3 +101,33 @@ GitlabRepositoriesTest >> testGetRawFileOfProjectWithParams [
 	params keysAndValuesDo: [ :key :value | self assert: (client request url query at: key) equals: value ].
 	
 ]
+
+{ #category : 'tests' }
+GitlabRepositoriesTest >> testRepositoryTreeOfProjectWithParams [
+
+	| hostUrl gitlabApi result client objectId object endpoint params projectId gitlabRepositories |
+	
+	"Given"
+	hostUrl := 'https://www.url.com'.
+	client := ZnClient new.
+	
+	gitlabApi := GitlabApi new privateToken: 'token'; hostUrl: hostUrl; client: client.
+	
+	projectId := 4.
+	params := { 'param' -> 'value' } asDictionary.
+	
+	objectId := 1.
+	object := { #id -> objectId } asDictionary.
+	
+	gitlabRepositories := GitlabRepositories new gitlabAPI: gitlabApi.
+	
+	endpoint := '/projects/', projectId asString, '/repository/tree'.
+	(gitlabRepositories stub getAll: endpoint withParams: params) willReturn: { object }.
+	
+	"When"
+	result := gitlabRepositories repositoryTreeOfProject: projectId withParams: params. 
+	
+	"Then"
+	self assert: result size equals: 1.
+	self assert: (result first at: #id) equals: objectId.
+]
