@@ -51,28 +51,35 @@ GitlabCommitsTest >> testCreateInProjectBranchMessageActions [
 { #category : 'tests' }
 GitlabCommitsTest >> testDiffOfInProject [
 
-	| hostUrl gitlabApi projectId result client commitId diffContent1 diff1 diffContent2 diff2 path |
+	| hostUrl gitlabApi projectId result client commitId diffContent1 diff1 diffContent2 diff2 path gitlabCommits |
 	
 	"Given"
-	hostUrl := 'www.url.com'.
-	client := Mock new.
+	hostUrl := 'https://www.url.com'.
+	client := ZnClient new.
 	
 	gitlabApi := GitlabApi new privateToken: 'token'; hostUrl: hostUrl; client: client.
+	
+	gitlabCommits := GitlabCommits new gitlabAPI: gitlabApi.
 	
 	commitId:= '1aert14'.
 	projectId := 1.
 	
 	diffContent1 := 'diff1'.
-	diff1 := '{ "diff": "', diffContent1 ,'"}'.
+	diff1 := { 
+		#diff -> diffContent1 
+	} asDictionary.
+	
 	diffContent2 := 'diff2'.
-	diff2 := '{ "diff": "', diffContent2 ,'" }'.
+	diff2 := { 
+		#diff -> diffContent2 
+	} asDictionary.
 	
-	path := hostUrl, '/projects/', projectId asString, '/repository/commits/', commitId, '/diff'.
+	path := '/projects/', projectId asString, '/repository/commits/', commitId, '/diff'.
 	
-	(client stub get: path) willReturn: '[ ', diff1, ',', diff2, ']'. 
+	(gitlabCommits stub get: path withParams: Dictionary new) willReturn: {diff1 . diff2}.
 	
 	"When"
-	result := gitlabApi commits diffOf: commitId inProject: projectId.
+	result := gitlabCommits diffOf: commitId inProject: projectId.
 	
 	"Then"
 	self assert: result size equals: 2.
@@ -82,7 +89,7 @@ GitlabCommitsTest >> testDiffOfInProject [
 
 { #category : 'tests' }
 GitlabCommitsTest >> testDiffOfInProjectUniDiff [
-	| hostUrl gitlabApi projectId result client commitId diffContent1 diff1 diffContent2 diff2 path uniDiff |
+	| hostUrl gitlabApi projectId result client commitId diffContent1 diff1 diffContent2 diff2 path uniDiff gitlabCommits params |
 	
 	"Given"
 	hostUrl := 'https://www.url.com'.
@@ -90,24 +97,34 @@ GitlabCommitsTest >> testDiffOfInProjectUniDiff [
 	
 	gitlabApi := GitlabApi new privateToken: 'token'; hostUrl: hostUrl; client: client.
 	
+	gitlabCommits := GitlabCommits new gitlabAPI: gitlabApi.
+	
 	commitId:= '1aert14'.
 	projectId := 1.
 	uniDiff := true.
 	
+	params := { 
+		#unidiff -> uniDiff
+	} asDictionary.
+	
 	diffContent1 := 'diff1'.
-	diff1 := '{ "diff": "', diffContent1 ,'"}'.
+	diff1 := { 
+		#diff -> diffContent1 
+	} asDictionary.
+	
 	diffContent2 := 'diff2'.
-	diff2 := '{ "diff": "', diffContent2 ,'" }'.
+	diff2 := { 
+		#diff -> diffContent2 
+	} asDictionary.
 	
-	path := hostUrl, '/projects/', projectId asString, '/repository/commits/', commitId, '/diff'.
+	path := '/projects/', projectId asString, '/repository/commits/', commitId, '/diff'.
 	
-	(client stub get: path) willReturn: '[ ', diff1, ',', diff2, ']'.
+	(gitlabCommits stub get: path withParams: params) willReturn: {diff1 . diff2}.
 	
 	"When"
-	result := gitlabApi commits diffOf: commitId inProject: projectId uniDiff: uniDiff.
+	result := gitlabCommits diffOf: commitId inProject: projectId uniDiff: uniDiff.
 	
 	"Then"
-	self assert: (client request url query at: #unidiff) equals: uniDiff asString.
 	self assert: result size equals: 2.
 	self assert: (result first at: #diff) equals: diffContent1.
 	self assert: (result last at: #diff) equals: diffContent2.
