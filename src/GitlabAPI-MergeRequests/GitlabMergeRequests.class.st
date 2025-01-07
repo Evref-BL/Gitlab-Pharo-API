@@ -6,6 +6,16 @@ Class {
 }
 
 { #category : 'api' }
+GitlabMergeRequests >> allOfProject: projectId withParams: paramsDict [
+	"https://docs.gitlab.com/ee/api/merge_requests.html#list-project-merge-requests"
+	
+	| endpoint |
+	endpoint := '/projects/', projectId asString, '/merge_requests'.
+	
+	^self getAll: endpoint withParams: paramsDict.
+]
+
+{ #category : 'api' }
 GitlabMergeRequests >> commitsOf: mergeRequestIID inProject: projectId [
 	"https://docs.gitlab.com/ee/api/merge_requests.html#get-single-merge-request-commits"
 	
