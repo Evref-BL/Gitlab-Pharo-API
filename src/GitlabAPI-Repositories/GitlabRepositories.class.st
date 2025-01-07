@@ -42,3 +42,13 @@ GitlabRepositories >> getRawFile: filePath ofProject: projectId withParams: para
 	
 	^gitlabAPI client get.
 ]
+
+{ #category : 'api' }
+GitlabRepositories >> repositoryTreeOfProject: projectId withParams: paramsDict [
+	"https://docs.gitlab.com/ee/api/repositories.html#list-repository-tree"
+	
+	| endpoint |
+	endpoint := '/projects/', projectId asString, '/repository/tree'.
+	
+	^self getAll: endpoint withParams: paramsDict. 
+]
