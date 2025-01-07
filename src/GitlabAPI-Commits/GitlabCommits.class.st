@@ -47,10 +47,10 @@ GitlabCommits >> diffOf: commitSha inProject: projectId uniDiff: unidiff [
 GitlabCommits >> get: commitSha inProject: projectId [
 	"https://docs.gitlab.com/ee/api/commits.html#get-a-single-commit"
 	
-	| response |
-	response := gitlabAPI client get: gitlabAPI hostUrl, '/projects/', projectId asString, '/repository/commits/', commitSha.
+	| endpoint |
+	endpoint := '/projects/', projectId asString, '/repository/commits/', commitSha.
 	
-	^NeoJSONReader fromString: response.
+	^self get: endpoint withParams: Dictionary new.
 ]
 
 { #category : 'api' }

@@ -235,7 +235,7 @@ GitlabCommitsTest >> testGetByPagePerPageInProjectWithParams [
 { #category : 'tests' }
 GitlabCommitsTest >> testGetInProject [
 
-	| hostUrl gitlabApi projectId result client commitId |
+	| hostUrl gitlabApi projectId result client commitId gitlabCommits endpoint commit |
 	
 	"Given"
 	hostUrl := 'www.url.com'.
@@ -243,14 +243,21 @@ GitlabCommitsTest >> testGetInProject [
 	
 	gitlabApi := GitlabApi new privateToken: 'token'; hostUrl: hostUrl; client: client.
 	
+	gitlabCommits := GitlabCommits new gitlabAPI: gitlabApi.
+	
 	commitId:= '1aert14'.
 	projectId := 1.
 	
-	(client stub get: hostUrl, '/projects/', projectId asString, '/repository/commits/', commitId) willReturn: '{ "id": "', commitId, '" }'. 
+	commit := { 
+		#id -> 4
+	} asDictionary.
+	
+	endpoint := '/projects/', projectId asString, '/repository/commits/', commitId.
+	(gitlabCommits stub get: endpoint withParams: Dictionary new) willReturn: commit. 
 	
 	"When"
-	result := gitlabApi commits get: commitId inProject: projectId.
+	result := gitlabCommits get: commitId inProject: projectId.
 	
 	"Then"
-	self assert: (result at: #id) equals: commitId.
+	self assert: result equals: commit.
 ]
