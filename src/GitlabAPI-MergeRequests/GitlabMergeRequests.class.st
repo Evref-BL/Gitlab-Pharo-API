@@ -6,6 +6,16 @@ Class {
 }
 
 { #category : 'api' }
+GitlabMergeRequests >> commitsOf: mergeRequestIID inProject: projectId [
+	"https://docs.gitlab.com/ee/api/merge_requests.html#get-single-merge-request-commits"
+	
+	| endpoint |
+	endpoint := '/projects/', projectId asString, '/merge_requests/', mergeRequestIID asString, '/commits'.
+	
+	^self getAll: endpoint withParams: Dictionary new. 
+]
+
+{ #category : 'api' }
 GitlabMergeRequests >> createForProject: projectId withSourceBranch: sourceBranch targetBranch: targetBranch title: title [
 	"https://docs.gitlab.com/ee/api/merge_requests.html#create-mr"
 	
