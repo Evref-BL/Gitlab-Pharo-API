@@ -6,6 +6,16 @@ Class {
 }
 
 { #category : 'api' }
+GitlabMergeRequests >> allOfProject: projectId [
+	"https://docs.gitlab.com/ee/api/merge_requests.html#list-project-merge-requests"
+	
+	| endpoint |
+	endpoint := '/projects/', projectId asString, '/merge_requests'.
+	
+	^self allOfProject: projectId withParams: Dictionary new.
+]
+
+{ #category : 'api' }
 GitlabMergeRequests >> allOfProject: projectId withParams: paramsDict [
 	"https://docs.gitlab.com/ee/api/merge_requests.html#list-project-merge-requests"
 	

@@ -9,6 +9,34 @@ Class {
 }
 
 { #category : 'tests' }
+GitlabMergeRequestsTest >> testAllOfProject [
+
+	| hostUrl gitlabApi result client objectId object projectId gitlabMergeRequests |
+	
+	"Given"
+	hostUrl := 'https://www.url.com'.
+	client := ZnClient new.
+	
+	gitlabApi := GitlabApi new privateToken: 'token'; hostUrl: hostUrl; client: client.
+	
+	projectId := 1.
+	
+	objectId := 1.
+	object := { #id -> objectId } asDictionary.
+	
+	gitlabMergeRequests := GitlabMergeRequests new gitlabAPI: gitlabApi.
+	
+	(gitlabMergeRequests stub allOfProject: projectId withParams: Dictionary new) willReturn: { object }.
+	
+	"When"
+	result := gitlabMergeRequests allOfProject: projectId. 
+	
+	"Then"
+	self assert: result size equals: 1.
+	self assert: (result first at: #id) equals: objectId.
+]
+
+{ #category : 'tests' }
 GitlabMergeRequestsTest >> testAllOfProjectWithParams [
 
 	| hostUrl gitlabApi result client objectId object endpoint projectId gitlabMergeRequests params |
