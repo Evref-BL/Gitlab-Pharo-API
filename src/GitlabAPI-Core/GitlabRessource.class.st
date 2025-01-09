@@ -26,21 +26,32 @@ GitlabRessource >> get: endpoint withParams: paramsDict [
 
 { #category : 'api' }
 GitlabRessource >> getAll: endpoint withParams: paramsDict [
+
 	| currentPage results |
 	currentPage := 1.
 	results := OrderedCollection new.
-	
-	[ 
-	|response|
-		response := self getByPage: currentPage perPage: 20 from: endpoint withParams: paramsDict.
-		(response isEmpty or: response = '[]')ifTrue: [ ^results ].
-		
-		gitlabAPI output = 'json' ifTrue: [ results add: response ] ifFalse: [ results addAll: response ].
-		currentPage := currentPage + 1.
-		
-		true.
-	] whileTrue.
-	
+
+	[
+	| response responseDict |
+	response := self
+		            getByPage: currentPage
+		            perPage: 20
+		            from: endpoint
+		            withParams: paramsDict.
+	(response isEmpty or: response = '[]') ifTrue: [ ^ results ].
+
+	"if api return an error"
+	responseDict := gitlabAPI output = 'json'
+		                ifTrue: [ NeoJSONReader fromString: response ]
+		                ifFalse: [ response ].
+	responseDict isArray ifFalse: [ ^response ].
+
+	gitlabAPI output = 'json'
+		ifTrue: [ results add: response ]
+		ifFalse: [ results addAll: response ].
+	currentPage := currentPage + 1.
+
+	true ] whileTrue
 ]
 
 { #category : 'api' }
