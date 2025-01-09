@@ -9,6 +9,33 @@ Class {
 }
 
 { #category : 'tests' }
+GitlabProjectsTest >> testAll [
+
+	| hostUrl gitlabApi result client objectId object endpoint gitlabProjects |
+	
+	"Given"
+	hostUrl := 'https://www.url.com'.
+	client := ZnClient new.
+	
+	gitlabApi := GitlabApi new privateToken: 'token'; hostUrl: hostUrl; client: client.
+	
+	objectId := 1.
+	object := { #id -> objectId } asDictionary.
+	
+	gitlabProjects := GitlabProjects new gitlabAPI: gitlabApi.
+	
+	endpoint := '/projects'.
+	(gitlabProjects stub allWithParams: Dictionary new) willReturn: { object }.
+	
+	"When"
+	result := gitlabProjects all.
+	
+	"Then"
+	self assert: result size equals: 1.
+	self assert: (result first at: #id) equals: objectId.
+]
+
+{ #category : 'tests' }
 GitlabProjectsTest >> testAllWithParams [
 
 	| hostUrl gitlabApi result client objectId object endpoint params gitlabProjects |
