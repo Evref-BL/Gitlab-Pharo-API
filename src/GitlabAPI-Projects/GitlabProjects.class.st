@@ -6,6 +6,12 @@ Class {
 }
 
 { #category : 'api' }
+GitlabProjects >> all [
+	"https://docs.gitlab.com/ee/api/projects.html#list-all-projects"
+	^self allWithParams: Dictionary new.
+]
+
+{ #category : 'api' }
 GitlabProjects >> allWithParams: paramsDict [
 	"https://docs.gitlab.com/ee/api/projects.html#list-all-projects"
 	
