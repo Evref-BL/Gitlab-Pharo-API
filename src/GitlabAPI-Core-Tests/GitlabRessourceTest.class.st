@@ -39,6 +39,37 @@ GitlabRessourceTest >> testGetAllWithParams [
 ]
 
 { #category : 'tests' }
+GitlabRessourceTest >> testGetAllWithParamsIfError [
+	| hostUrl gitlabApi result client objectId object endpoint gitlabRessource params error |
+	
+	"Given"
+	hostUrl := 'https://www.url.com'.
+	client := ZnClient new.
+	
+	gitlabApi := GitlabApi new privateToken: 'token'; hostUrl: hostUrl; client: client.
+	
+	endpoint := '/endpoint'.
+	params := { 'param' -> 'value' } asDictionary.
+	
+	objectId := 1.
+	object := { #id -> objectId } asDictionary.
+	
+	gitlabRessource := GitlabRessource new gitlabAPI: gitlabApi.
+	
+	error :=  { 
+		#message -> '403 Forbidden - Not authorized to access /api/v4/users'
+	} asDictionary.
+	
+	(gitlabRessource stub getByPage: 1 perPage: 20 from: endpoint withParams: params) willReturn: error.
+	
+	"When"
+	result := gitlabRessource getAll: endpoint withParams: params.
+	
+	"Then"
+	self assert: result equals: error.
+]
+
+{ #category : 'tests' }
 GitlabRessourceTest >> testGetAllWithParamsJSONOutput [
 	| hostUrl gitlabApi result client objectId object endpoint gitlabRessource params jsonObject |
 	
@@ -67,6 +98,35 @@ GitlabRessourceTest >> testGetAllWithParamsJSONOutput [
 	"Then"
 	self assert: result size equals: 2.
 	self assert: (result first) equals: jsonObject.
+]
+
+{ #category : 'tests' }
+GitlabRessourceTest >> testGetAllWithParamsJSONOutputIfError [
+	| hostUrl gitlabApi result client objectId object endpoint gitlabRessource params error |
+	
+	"Given"
+	hostUrl := 'https://www.url.com'.
+	client := ZnClient new.
+	
+	gitlabApi := GitlabApi new privateToken: 'token'; hostUrl: hostUrl; client: client; output: 'json'.
+	
+	endpoint := '/endpoint'.
+	params := { 'param' -> 'value' } asDictionary.
+	
+	objectId := 1.
+	object := { #id -> objectId } asDictionary.
+	
+	gitlabRessource := GitlabRessource new gitlabAPI: gitlabApi.
+	
+	error :=  '{"message":"403 Forbidden - Not authorized to access /api/v4/users"}'.
+	
+	(gitlabRessource stub getByPage: 1 perPage: 20 from: endpoint withParams: params) willReturn: error.
+	
+	"When"
+	result := gitlabRessource getAll: endpoint withParams: params.
+	
+	"Then"
+	self assert: result equals: error.
 ]
 
 { #category : 'tests' }
