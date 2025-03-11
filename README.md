@@ -5,7 +5,9 @@
 
 This is a Pharo client for the [Gitlab REST API](https://docs.gitlab.com/ee/api/rest/)
 
-## Installation 
+## Usage
+
+### Installation
 
 ```st
 Metacello new
@@ -13,4 +15,65 @@ Metacello new
   baseline: 'GitlabAPI';
   onConflict: [ :ex | ex useIncoming ];
   load
+```
+
+### Client
+
+To start using the API, you need to create a client instance with your GitLab host URL and a private token for authentication. Here’s an example:
+
+```st
+gitlabApi := GitlabApi new
+	privateToken: '<your token>';
+	hostUrl: 'https://<your gitlab domain>.com/api/v4';
+	yourself.
+```
+
+Replace `<your token>` with your actual GitLab private token and replace `<your gitlab domain>` with the appropriate domain.
+
+### Ressources
+
+The API provides different resource classes to interact with various GitLab entities. These resources include:
+
+- branches
+- commits
+- discussions
+- groups
+- jobs
+- mergeRequests
+- notes
+- pipelines
+- projects
+- repositories
+- users
+
+Each resource provides methods for interacting with the corresponding GitLab resource. You can access them like this:
+
+```st
+gitlabApi projects <method>
+```
+
+### Example
+
+Here are a few examples of how to interact with the API:
+
+#### Fetch All Projects
+
+This example retrieves all projects from GitLab:
+
+```st
+| projects |
+projects := gitlabApi projects all
+```
+
+#### Fetch All Projects Sorted in Ascending Order
+
+This example demonstrates how to fetch all projects sorted in ascending order, using parameters:
+
+```st
+| projects params |
+params := {
+  #sort -> 'asc'
+} asDictionary.
+
+projects := gitlabApi projects allWithParams: params.
 ```
