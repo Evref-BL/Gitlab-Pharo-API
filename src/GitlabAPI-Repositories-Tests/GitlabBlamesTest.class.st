@@ -9,9 +9,9 @@ Class {
 }
 
 { #category : 'tests' }
-GitlabBlamesTest >> testGetBlameFileOfProjectWithParams [
+GitlabBlamesTest >> testGetBlameOfInRefOfProject [
 
-| hostUrl gitlabApi projectId result client gitlabBlames filePath response params |
+| hostUrl gitlabApi projectId result client gitlabBlames filePath response   ref |
 	
 	"Given"
 	hostUrl := 'www.url.com'.
@@ -22,16 +22,44 @@ GitlabBlamesTest >> testGetBlameFileOfProjectWithParams [
 	
 	filePath := 'file.txt'.
 	projectId := 1.
-	params := { 
-		#ref -> 'ref'
-	} asDictionary.
+   ref := 'branch'.
 	
-	response := '[{"line":"some code","commit":{"id":"123456"}}]' .
+	response := '[{"line":" code","commit":{"id":"123456"}}]' .
 
 	(client stub get) willReturn: response.
 	
 	"When"
-	 result := gitlabBlames  getBlameFile: filePath ofProject:projectId  withParams:params .
+     result := gitlabBlames 	getBlameOf: filePath inRef: ref ofProject: projectId.
+	
+	"Then"
+	self assert: result equals: (NeoJSONReader fromString: response).
+
+]
+
+{ #category : 'tests' }
+GitlabBlamesTest >> testGetBlameOfInRefWithRangeOfProject [
+
+
+| hostUrl gitlabApi projectId result client gitlabBlames filePath response  ref range |
+	
+	"Given"
+	hostUrl := 'www.url.com'.
+	client  := ZnClient new.
+	
+	gitlabApi := GitlabApi new privateToken: 'token'; hostUrl: hostUrl; client: client.
+	gitlabBlames := GitlabBlames new gitlabAPI: gitlabApi.
+	
+	filePath := 'file.txt'.
+	ref:= 'branch'.
+	range := 'range '.
+	projectId := 1.
+
+	response := '[{"line":" code","commit":{"id":"123456"}}]' .
+
+	(client stub get) willReturn: response.
+	
+	"When"
+	 result := gitlabBlames  getBlameOf: filePath inRef: ref withRange: range ofProject:projectId .
 	
 	"Then"
 	self assert: result equals: (NeoJSONReader fromString: response).

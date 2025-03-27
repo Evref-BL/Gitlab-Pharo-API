@@ -6,11 +6,25 @@ Class {
 }
 
 { #category : 'api' }
-GitlabBlames >> getBlameFile: filePath ofProject: projectId withParams: paramsDict [
+GitlabBlames >> getBlameOf: filePath inRef: ref ofProject: projectId [
 
-	| endpoint  |
-			
+	| endpoint params  |
+		params := { 
+		    #ref ->   ref  .
+	       } asDictionary.		
 	  endpoint := '/projects/', projectId asString, '/repository/files/', filePath encodeFilePath, '/blame'.
 	
-	 	^self get: endpoint withParams: paramsDict   .
+	 	^self get: endpoint withParams: params   .
+]
+
+{ #category : 'api' }
+GitlabBlames >> getBlameOf: filePath inRef: ref withRange:gitlabRange ofProject:projectId [
+	| endpoint params  |
+		params := { 
+		    #ref ->   ref  .
+		    #range -> gitlabRange 
+	       } asDictionary.		
+	  endpoint := '/projects/', projectId asString, '/repository/files/', filePath encodeFilePath, '/blame'.
+	
+	 	^self get: endpoint withParams: params   .
 ]
