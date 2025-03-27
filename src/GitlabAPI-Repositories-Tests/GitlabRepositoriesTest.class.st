@@ -47,28 +47,30 @@ GitlabRepositoriesTest >> testCompareInProjectFromTo [
 { #category : 'tests' }
 GitlabRepositoriesTest >> testGetBlameOfInRefOfProject [
 
-| hostUrl gitlabApi projectId result client gitlabRepositories filePath response   ref |
+| hostUrl gitlabApi projectId result client gitlabRepositories filePath response   ref  path params  |
 	
 	"Given"
 	hostUrl := 'www.url.com'.
 	client  := ZnClient new.
 	
-	gitlabApi := GitlabApi new privateToken: 'token'; hostUrl: hostUrl; client: client.
-	gitlabRepositories := GitlabRepositories  new gitlabAPI: gitlabApi.
-	
+	gitlabApi := GitlabApi new privateToken: 'token'; hostUrl: hostUrl; client: client;yourself.
+	gitlabRepositories := GitlabRepositories  new gitlabAPI: gitlabApi;yourself.
+	ref:= 'branch'.
+	params := {  #ref ->   ref  } asDictionary.	
 	filePath := 'file.txt'.
-	projectId := 1.
-   ref := 'branch'.
-	
-	response := '[{"line":" code","commit":{"id":"123456"}}]' .
+	projectId := 1 .
 
-	(client stub get) willReturn: response.
+	response := { #line -> 'a line of code'. #commit -> { #id -> '15616510' } asDictionary } asDictionary.
+   path := '/projects/', projectId asString, '/repository/files/', filePath encodeFilePath, '/blame'.
+	
+	   (gitlabRepositories stub get: path withParams: params) willReturn: (response).
+	
 	
 	"When"
-     result := gitlabRepositories 	getBlameOf: filePath inRef: ref ofProject: projectId.
+     result := gitlabRepositories getBlameOf: filePath inRef: ref ofProject: projectId.
 	
 	"Then"
-	self assert: result equals: (NeoJSONReader fromString: response).
+	self assert: result equals: response .
 
 ]
 
@@ -76,7 +78,7 @@ GitlabRepositoriesTest >> testGetBlameOfInRefOfProject [
 GitlabRepositoriesTest >> testGetBlameOfInRefWithRangeOfProject [
 
 
-| hostUrl gitlabApi projectId result client gitlabRepositories filePath response  ref range |
+| hostUrl gitlabApi projectId result client gitlabRepositories filePath response  ref range path  params |
 	
 	"Given"
 	hostUrl := 'www.url.com'.
@@ -84,21 +86,26 @@ GitlabRepositoriesTest >> testGetBlameOfInRefWithRangeOfProject [
 	
 	gitlabApi := GitlabApi new privateToken: 'token'; hostUrl: hostUrl; client: client.
 	gitlabRepositories := GitlabRepositories new gitlabAPI: gitlabApi.
-	
+	ref:= 'branch'.
+	range :=  {  #start ->   10 . #end -> 20 } asDictionary.
+		params := { 
+		    #ref ->   ref  .
+		    #range -> range 
+	       } asDictionary..	
 	filePath := 'file.txt'.
 	ref:= 'branch'.
-	range := 'range '.
-	projectId := 1.
 
+	projectId := 1.
+   	path := '/projects/', projectId asString, '/repository/files/', filePath encodeFilePath, '/blame'.
 	response := '[{"line":" code","commit":{"id":"123456"}}]' .
 
-	(client stub get) willReturn: response.
+	   (gitlabRepositories stub get: path withParams: params) willReturn: (response).
 	
 	"When"
 	 result := gitlabRepositories  getBlameOf: filePath inRef: ref withRange: range ofProject:projectId .
 	
 	"Then"
-	self assert: result equals: (NeoJSONReader fromString: response).
+	self assert: result equals: response .
 
 ]
 

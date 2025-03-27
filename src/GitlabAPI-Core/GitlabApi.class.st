@@ -12,11 +12,6 @@ Class {
 }
 
 { #category : 'ressources' }
-GitlabApi >> blames [
-	^GitlabBlames new gitlabAPI: self.
-]
-
-{ #category : 'ressources' }
 GitlabApi >> branches [
 	^GitlabBranches new gitlabAPI: self.
 ]
