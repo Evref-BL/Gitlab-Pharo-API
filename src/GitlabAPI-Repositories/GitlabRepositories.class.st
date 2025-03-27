@@ -21,6 +21,30 @@ GitlabRepositories >> compareInProject: projectId from: fromSHA to: toSHA [
 ]
 
 { #category : 'api' }
+GitlabRepositories >> getBlameOf: filePath inRef: ref ofProject: projectId [
+
+	| endpoint params  |
+		params := { 
+		    #ref ->   ref  .
+	       } asDictionary.		
+	  endpoint := '/projects/', projectId asString, '/repository/files/', filePath encodeFilePath, '/blame'.
+	
+	 	^self get: endpoint withParams: params   .
+]
+
+{ #category : 'api' }
+GitlabRepositories >> getBlameOf: filePath inRef: ref withRange:gitlabRange ofProject:projectId [
+	| endpoint params  |
+		params := { 
+		    #ref ->   ref  .
+		    #range -> gitlabRange 
+	       } asDictionary.		
+	  endpoint := '/projects/', projectId asString, '/repository/files/', filePath encodeFilePath, '/blame'.
+	
+	 	^self get: endpoint withParams: params   .
+]
+
+{ #category : 'api' }
 GitlabRepositories >> getRawFile: filePath ofProject: projectId [
 	"https://docs.gitlab.com/ee/api/repository_files.html#get-raw-file-from-repository"
 	

@@ -45,6 +45,64 @@ GitlabRepositoriesTest >> testCompareInProjectFromTo [
 ]
 
 { #category : 'tests' }
+GitlabRepositoriesTest >> testGetBlameOfInRefOfProject [
+
+| hostUrl gitlabApi projectId result client gitlabRepositories filePath response   ref |
+	
+	"Given"
+	hostUrl := 'www.url.com'.
+	client  := ZnClient new.
+	
+	gitlabApi := GitlabApi new privateToken: 'token'; hostUrl: hostUrl; client: client.
+	gitlabRepositories := GitlabRepositories  new gitlabAPI: gitlabApi.
+	
+	filePath := 'file.txt'.
+	projectId := 1.
+   ref := 'branch'.
+	
+	response := '[{"line":" code","commit":{"id":"123456"}}]' .
+
+	(client stub get) willReturn: response.
+	
+	"When"
+     result := gitlabRepositories 	getBlameOf: filePath inRef: ref ofProject: projectId.
+	
+	"Then"
+	self assert: result equals: (NeoJSONReader fromString: response).
+
+]
+
+{ #category : 'tests' }
+GitlabRepositoriesTest >> testGetBlameOfInRefWithRangeOfProject [
+
+
+| hostUrl gitlabApi projectId result client gitlabRepositories filePath response  ref range |
+	
+	"Given"
+	hostUrl := 'www.url.com'.
+	client  := ZnClient new.
+	
+	gitlabApi := GitlabApi new privateToken: 'token'; hostUrl: hostUrl; client: client.
+	gitlabRepositories := GitlabRepositories new gitlabAPI: gitlabApi.
+	
+	filePath := 'file.txt'.
+	ref:= 'branch'.
+	range := 'range '.
+	projectId := 1.
+
+	response := '[{"line":" code","commit":{"id":"123456"}}]' .
+
+	(client stub get) willReturn: response.
+	
+	"When"
+	 result := gitlabRepositories  getBlameOf: filePath inRef: ref withRange: range ofProject:projectId .
+	
+	"Then"
+	self assert: result equals: (NeoJSONReader fromString: response).
+
+]
+
+{ #category : 'tests' }
 GitlabRepositoriesTest >> testGetRawFileOfProject [
 
 	| hostUrl gitlabApi projectId result client path gitlabRepositories filePath response |
