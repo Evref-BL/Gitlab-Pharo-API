@@ -1,8 +1,8 @@
 Class {
 	#name : 'GitlabBlames',
 	#superclass : 'GitlabRessource',
-	#category : 'GitlabAPI-Blame',
-	#package : 'GitlabAPI-Blame'
+	#category : 'GitlabAPI-Repositories',
+	#package : 'GitlabAPI-Repositories'
 }
 
 { #category : 'api' }
