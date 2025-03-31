@@ -75,7 +75,8 @@ GitlabRepositoriesTest >> testGetBlameOfInRefOfProject [
 ]
 
 { #category : 'tests' }
-GitlabRepositoriesTest >> testGetBlameOfInRefWithRangeOfProject [
+GitlabRepositoriesTest >> testGetBlameOfInRefStartEndOfProject [
+
 
 
 | hostUrl gitlabApi projectId result client gitlabRepositories filePath response  ref range path  params |
@@ -87,22 +88,23 @@ GitlabRepositoriesTest >> testGetBlameOfInRefWithRangeOfProject [
 	gitlabApi := GitlabApi new privateToken: 'token'; hostUrl: hostUrl; client: client.
 	gitlabRepositories := GitlabRepositories new gitlabAPI: gitlabApi.
 	ref:= 'branch'.
-	range :=  {  #start ->   10 . #end -> 20 } asDictionary.
+	
 		params := { 
 		    #ref ->   ref  .
-		    #range -> range 
+		    #start -> 1.
+		    #end -> 5  
 	       } asDictionary..	
 	filePath := 'file.txt'.
 	ref:= 'branch'.
 
 	projectId := 1.
    	path := '/projects/', projectId asString, '/repository/files/', filePath encodeFilePath, '/blame'.
-	response := '[{"line":" code","commit":{"id":"123456"}}]' .
+	response := '[{"line":" some lines of code for this file ","commit":{"id":"123456"}}]' .
 
 	   (gitlabRepositories stub get: path withParams: params) willReturn: (response).
 	
 	"When"
-	 result := gitlabRepositories  getBlameOf: filePath inRef: ref withRange: range ofProject:projectId .
+	 result := gitlabRepositories  getBlameOf: filePath inRef: ref start:1 end:5    ofProject:projectId .
 	
 	"Then"
 	self assert: result equals: response .

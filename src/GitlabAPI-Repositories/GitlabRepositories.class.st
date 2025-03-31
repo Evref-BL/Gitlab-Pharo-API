@@ -33,11 +33,12 @@ GitlabRepositories >> getBlameOf: filePath inRef: ref ofProject: projectId [
 ]
 
 { #category : 'api' }
-GitlabRepositories >> getBlameOf: filePath inRef: ref withRange:gitlabRange ofProject:projectId [
+GitlabRepositories >> getBlameOf: filePath inRef: ref start:startRange end: endRange ofProject:projectId [
 	| endpoint params  |
 		params := { 
 		    #ref ->   ref  .
-		    #range -> gitlabRange 
+		    #start -> startRange .
+		    #end -> endRange 
 	       } asDictionary.		
 	  endpoint := '/projects/', projectId asString, '/repository/files/', filePath encodeFilePath, '/blame'.
 	
