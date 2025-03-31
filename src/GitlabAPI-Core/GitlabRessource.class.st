@@ -14,9 +14,9 @@ GitlabRessource >> get: endpoint withParams: paramsDict [
 	
 	gitlabAPI client path: gitlabAPI hostUrl, endpoint.
 	paramsDict keysAndValuesDo: [ :key :value | gitlabAPI client queryAt: key put: value ].
-	
+
 	response := gitlabAPI client get.
-	
+
 	gitlabAPI output = 'json' ifTrue: [ ^response ].
 	
 	^NeoJSONReader fromString: response. 
