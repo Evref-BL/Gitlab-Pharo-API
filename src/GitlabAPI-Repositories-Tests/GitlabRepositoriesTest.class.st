@@ -79,7 +79,7 @@ GitlabRepositoriesTest >> testGetBlameOfInRefStartEndOfProject [
 
 
 
-| hostUrl gitlabApi projectId result client gitlabRepositories filePath response  ref range path  params |
+| hostUrl gitlabApi projectId result client gitlabRepositories filePath response  ref  path  params |
 	
 	"Given"
 	hostUrl := 'www.url.com'.
@@ -91,7 +91,7 @@ GitlabRepositoriesTest >> testGetBlameOfInRefStartEndOfProject [
 	
 		params := { 
 		    #ref ->   ref  .
-		    #start -> 1.
+		    #start -> 1 .
 		    #end -> 5  
 	       } asDictionary..	
 	filePath := 'file.txt'.
