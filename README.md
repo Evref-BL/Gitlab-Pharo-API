@@ -9,12 +9,21 @@ This is a Pharo client for the [Gitlab REST API](https://docs.gitlab.com/ee/api/
 
 ### Installation
 
+#### From playground
+
 ```st
 Metacello new
   githubUser: 'Evref-BL' project: 'Gitlab-Pharo-API' commitish: 'develop' path: 'src';
   baseline: 'GitlabAPI';
   onConflict: [ :ex | ex useIncoming ];
   load
+```
+
+#### Baseline dependency
+
+```st
+spec baseline: 'GitlabAPI' with: [
+	spec repository: 'github://Evref-BL/Gitlab-Pharo-API:develop' ];
 ```
 
 ### Client
