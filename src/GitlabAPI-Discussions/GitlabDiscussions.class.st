@@ -30,3 +30,13 @@ GitlabDiscussions >> getAllinMR: mergeRequestIID inProject: projectId [
 	
 	^self get: endpoint withParams: Dictionary new.
 ]
+
+{ #category : 'api' }
+GitlabDiscussions >> getinMR: mergeRequestIID inProject: projectId aDiscussion: discussionId [
+	"https://docs.gitlab.com/api/discussions/#get-single-merge-request-discussion-item"
+	
+	| endpoint |
+	endpoint := '/projects/', projectId asString, '/merge_requests/', mergeRequestIID asString, '/discussions/', discussionId.
+	
+	^self get: endpoint withParams: Dictionary new.
+]

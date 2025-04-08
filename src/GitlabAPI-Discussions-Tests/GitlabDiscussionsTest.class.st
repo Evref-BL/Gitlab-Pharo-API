@@ -73,3 +73,33 @@ GitlabDiscussionsTest >> testGetAllInMRInProject [
 	self assert: (result first at: #id) equals: objectId.
 
 ]
+
+{ #category : 'tests' }
+GitlabDiscussionsTest >> testGetInMRInProjectADiscussion [
+
+	"Given"
+	| hostUrl client gitlabApi projectId mergeRequestIID discussionId objectId object gitlabDiscussions endpoint result |
+	hostUrl := 'https://www.url.com'.
+	client := ZnClient new.
+
+	gitlabApi := GitlabApi new privateToken: 'token'; hostUrl: hostUrl; client: client.
+
+	projectId := 1.
+	mergeRequestIID := 42.
+	discussionId := 'abc123'.
+
+	objectId := 'def456'.
+	object := { #id -> objectId } asDictionary.
+
+	gitlabDiscussions := GitlabDiscussions new gitlabAPI: gitlabApi.
+
+	endpoint := '/projects/', projectId asString, '/merge_requests/', mergeRequestIID asString, '/discussions/', discussionId.
+	(gitlabDiscussions stub getinMR: mergeRequestIID inProject: projectId aDiscussion: discussionId) willReturn: object.
+
+	"When"
+	result := gitlabDiscussions getinMR: mergeRequestIID inProject: projectId aDiscussion: discussionId.
+
+	"Then"
+	self assert: (result at: #id) equals: objectId.
+
+]
