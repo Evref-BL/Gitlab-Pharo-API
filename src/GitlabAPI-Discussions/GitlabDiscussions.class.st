@@ -22,21 +22,21 @@ GitlabDiscussions >> createThreadInMergeRequest: mergeRequestIID ofProject: proj
 ]
 
 { #category : 'api' }
-GitlabDiscussions >> getAllinMR: mergeRequestIID inProject: projectId [
-	"https://docs.gitlab.com/api/discussions/#list-project-merge-request-discussion-items"
+GitlabDiscussions >> get: discussionId inMergeRequest: mergeRequestIID ofProject: projectId [
+	"https://docs.gitlab.com/api/discussions/#get-single-merge-request-discussion-item"
 	
 	| endpoint |
-	endpoint := '/projects/', projectId asString, '/merge_requests/', mergeRequestIID asString, '/discussions'.
+	endpoint := '/projects/', projectId asString, '/merge_requests/', mergeRequestIID asString, '/discussions/', discussionId.
 	
 	^self get: endpoint withParams: Dictionary new.
 ]
 
 { #category : 'api' }
-GitlabDiscussions >> getinMR: mergeRequestIID inProject: projectId aDiscussion: discussionId [
-	"https://docs.gitlab.com/api/discussions/#get-single-merge-request-discussion-item"
+GitlabDiscussions >> getAllInMR: mergeRequestIID inProject: projectId [
+	"https://docs.gitlab.com/api/discussions/#list-project-merge-request-discussion-items"
 	
 	| endpoint |
-	endpoint := '/projects/', projectId asString, '/merge_requests/', mergeRequestIID asString, '/discussions/', discussionId.
+	endpoint := '/projects/', projectId asString, '/merge_requests/', mergeRequestIID asString, '/discussions'.
 	
 	^self get: endpoint withParams: Dictionary new.
 ]
