@@ -44,3 +44,32 @@ GitlabDiscussionsTest >> testCreateThreadInMergeRequestOfProjectBodyPosition [
 	"Then"
 	self assert: (result at: #message) equals: (response at: #message).
 ]
+
+{ #category : 'tests' }
+GitlabDiscussionsTest >> testGetAllInMRInProject [
+
+	| hostUrl client gitlabApi projectId mergeRequestIID objectId object gitlabDiscussions endpoint result |
+	hostUrl := 'https://www.url.com'.
+	client := ZnClient new.
+
+	gitlabApi := GitlabApi new privateToken: 'token'; hostUrl: hostUrl; client: client.
+
+	projectId := 1.
+	mergeRequestIID := 42.
+
+	objectId := 'abc123'.
+	object := { #id -> objectId } asDictionary.
+
+	gitlabDiscussions := GitlabDiscussions new gitlabAPI: gitlabApi.
+
+	endpoint := '/projects/', projectId asString, '/merge_requests/', mergeRequestIID asString, '/discussions'.
+	(gitlabDiscussions stub getAllinMR: mergeRequestIID inProject: projectId) willReturn: { object }.
+
+	"When"
+	result := gitlabDiscussions getAllinMR: mergeRequestIID inProject: projectId.
+
+	"Then"
+	self assert: result size equals: 1.
+	self assert: (result first at: #id) equals: objectId.
+
+]
