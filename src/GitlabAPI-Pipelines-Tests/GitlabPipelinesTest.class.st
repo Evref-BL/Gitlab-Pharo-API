@@ -68,3 +68,32 @@ GitlabPipelinesTest >> testGetByPagePerPageInProject [
 	self assert: result size equals: 1.
 	self assert: (result first) equals: pipeline.
 ]
+
+{ #category : 'tests' }
+GitlabPipelinesTest >> testGetInProject [
+
+
+	| hostUrl gitlabApi result client endpoint projectId pipeline pipelines gitlabPipelines |
+	
+	"Given"
+	hostUrl := 'https://www.url.com'.
+	client := ZnClient new.
+	
+	gitlabApi := GitlabApi new privateToken: 'token'; hostUrl: hostUrl; client: client.
+	
+	projectId := 1.
+	
+	pipeline := { #id -> 4 } asDictionary.
+	pipelines := { pipeline . { #id -> 10 } asDictionary }.
+	
+	gitlabPipelines := GitlabPipelines new gitlabAPI: gitlabApi.
+	
+	endpoint := '/projects/', projectId asString, '/pipelines/', 4 asString.
+	(gitlabPipelines stub get: endpoint withParams: Dictionary new) willReturn: pipeline.
+	
+	"When"
+	result := gitlabPipelines get: 4 inProject: projectId.
+	
+	"Then"
+	self assert: result  equals: pipeline.
+]

@@ -12,20 +12,20 @@ GitlabJobs >> allForPipeline: pipelineId inProject: projectId [
 	
 	self deprecated: 'Use jobsOfPipeline:inProject: instead' transformWith: 
 				'`@rcv allForPipeline: `@arg1 inProject: `@arg2' 
-				-> '`@rcv jobsOfPipeline: `@arg1 inProject: `@arg2' .
+				-> '`@rcv getAllForPipeline: `@arg1 inProject: `@arg2' .
 	
-	^ self jobsOfPipeline: pipelineId inProject: projectId. 
+	^ self getAllForPipeline: pipelineId inProject: projectId. 
 ]
 
 { #category : 'api' }
-GitlabJobs >> jobsOfPipeline: pipelineId inProject: projectId [
+GitlabJobs >> getAllForPipeline: pipelineId inProject: projectId [
 	"https://docs.gitlab.com/ee/api/jobs.html#list-pipeline-jobs"
 	
-	^ self jobsOfPipeline: pipelineId inProject: projectId includingRetried: nil withScope: nil.
+	^ self getAllForPipeline: pipelineId inProject: projectId includingRetried: nil withScope: nil.
 ]
 
 { #category : 'api' }
-GitlabJobs >> jobsOfPipeline: pipelineId inProject: projectId includingRetried: include_retried withScope: scope [
+GitlabJobs >> getAllForPipeline: pipelineId inProject: projectId includingRetried: include_retried withScope: scope [
 	"https://docs.gitlab.com/ee/api/jobs.html#list-pipeline-jobs"
 	
 	| endpoint params|

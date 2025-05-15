@@ -6,6 +6,16 @@ Class {
 }
 
 { #category : 'api' }
+GitlabPipelines >> get: id inProject: projectId [ 
+	"https://docs.gitlab.com/ee/api/pipelines.html#list-project-pipelines"
+	
+	| endpoint |
+	endpoint := '/projects/', projectId asString, '/pipelines/', id asString.
+	
+	^ self get: endpoint withParams: Dictionary new . 
+]
+
+{ #category : 'api' }
 GitlabPipelines >> getAllInProject: projectId [
 	"https://docs.gitlab.com/ee/api/pipelines.html#list-project-pipelines"
 	
