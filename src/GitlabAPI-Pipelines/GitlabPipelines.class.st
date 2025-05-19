@@ -40,6 +40,18 @@ GitlabPipelines >> getByPage: page perPage: perPage inProject: projectId created
 ]
 
 { #category : 'api' }
+GitlabPipelines >> getByPage: page perPage: perPage inProject: projectId forMergerRequestIid: mergeRequestIid [
+	"https://docs.gitlab.com/ee/api/pipelines.html#list-project-pipelines"
+	
+	| endpoint params|
+	endpoint := '/projects/', projectId asString, '/merge_requests/', mergeRequestIid asString ,'/pipelines'.
+
+	params := Dictionary new.
+	
+	^ self getByPage: page perPage: perPage from: endpoint withParams: params . 
+]
+
+{ #category : 'api' }
 GitlabPipelines >> getByPage: page perPage: perPage inProject: projectId withName: name withOrder_by: order_by withRef: ref withScope: scope withSha: sha withSort: sort withSource: source withStatus: status updatedAfter: updated_after updatedAfter: updated_before createdAfter: created_after createdBefore: created_before [
 	"https://docs.gitlab.com/ee/api/pipelines.html#list-project-pipelines"
 	
