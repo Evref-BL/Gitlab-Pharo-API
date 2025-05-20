@@ -5,6 +5,11 @@ Class {
 	#package : 'GitlabAPI-Pipelines'
 }
 
+{ #category : 'initialization' }
+GitlabPipelines >> defaultPerPageItem [ 
+	^ 100
+]
+
 { #category : 'api' }
 GitlabPipelines >> get: id inProject: projectId [ 
 	"https://docs.gitlab.com/ee/api/pipelines.html#list-project-pipelines"
@@ -22,7 +27,19 @@ GitlabPipelines >> getAllInProject: projectId [
 	| endpoint |
 	endpoint := '/projects/', projectId asString, '/pipelines'.
 
-	^self getAll: endpoint withParams: Dictionary new.
+	^  self getAll: endpoint withParams: Dictionary new.
+	
+]
+
+{ #category : 'api' }
+GitlabPipelines >> getAllInProject: projectId withParams: params [
+	"https://docs.gitlab.com/ee/api/pipelines.html#list-project-pipelines"
+	
+	| endpoint |
+	endpoint := '/projects/', projectId asString, '/pipelines'.
+	
+	^ self getAll: endpoint withParams: params.
+
 ]
 
 { #category : 'api' }
