@@ -2,11 +2,17 @@ Class {
 	#name : 'GitlabRessource',
 	#superclass : 'Object',
 	#instVars : [
-		'gitlabAPI'
+		'gitlabAPI',
+		'itemPerPage'
 	],
 	#category : 'GitlabAPI-Core',
 	#package : 'GitlabAPI-Core'
 }
+
+{ #category : 'initialization' }
+GitlabRessource >> defaultPerPageItem [
+	^ 20.
+]
 
 { #category : 'api' }
 GitlabRessource >> get: endpoint withParams: paramsDict [
@@ -33,9 +39,12 @@ GitlabRessource >> getAll: endpoint withParams: paramsDict [
 
 	[
 	| response responseDict |
+	
+	('API: ', endpoint,' page: ' , currentPage asString, ' per_page: ', itemPerPage asString) recordInfo.
+	
 	response := self
 		            getByPage: currentPage
-		            perPage: 20
+		            perPage: itemPerPage
 		            from: endpoint
 		            withParams: paramsDict.
 	(response isEmpty or: response = '[]') ifTrue: [ ^ results ].
@@ -70,6 +79,11 @@ GitlabRessource >> getByPage: page perPage: perPage from: endpoint withParams: p
 GitlabRessource >> gitlabAPI: anObject [
 
 	gitlabAPI := anObject
+]
+
+{ #category : 'initialization' }
+GitlabRessource >> initialize [ 
+	itemPerPage := self defaultPerPageItem
 ]
 
 { #category : 'api' }

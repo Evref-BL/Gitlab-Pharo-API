@@ -79,3 +79,14 @@ GitlabMergeRequests >> get: mergeRequestIID inProject: projectId [
 	
 	^self get: endpoint withParams: Dictionary new.
 ]
+
+{ #category : 'api' }
+GitlabMergeRequests >> getByPage: page perPage: perPage inProject: projectId [
+	
+	|endpoint|
+	
+	endpoint := '/projects/', projectId asString, '/merge_requests'.
+	
+
+	^ self getByPage: page perPage: perPage from: endpoint withParams: Dictionary new . 
+]
