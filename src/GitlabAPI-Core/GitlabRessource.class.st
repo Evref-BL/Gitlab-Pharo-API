@@ -39,9 +39,7 @@ GitlabRessource >> getAll: endpoint withParams: paramsDict [
 
 	[
 	| response responseDict |
-	
-	('API: ', endpoint,' page: ' , currentPage asString, ' per_page: ', itemPerPage asString) recordInfo.
-	
+		
 	response := self
 		            getByPage: currentPage
 		            perPage: itemPerPage
