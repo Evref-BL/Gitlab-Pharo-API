@@ -90,3 +90,15 @@ GitlabMergeRequests >> getByPage: page perPage: perPage inProject: projectId [
 
 	^ self getByPage: page perPage: perPage from: endpoint withParams: Dictionary new . 
 ]
+
+{ #category : 'searching' }
+GitlabMergeRequests >> search: aString [ 
+	"https://docs.gitlab.com/api/merge_requests/#list-merge-requests"
+	| endpoint param|
+	endpoint := '/merge_requests/'.
+	param := { #search -> aString asString.
+				  #in -> 'title,description'.
+				#scope -> 'all' } asDictionary.
+	
+	^self get: endpoint withParams: param .
+]
