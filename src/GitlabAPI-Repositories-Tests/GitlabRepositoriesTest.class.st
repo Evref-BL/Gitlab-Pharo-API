@@ -45,6 +45,73 @@ GitlabRepositoriesTest >> testCompareInProjectFromTo [
 ]
 
 { #category : 'tests' }
+GitlabRepositoriesTest >> testGetBlameOfInRefOfProject [
+
+| hostUrl gitlabApi projectId result client gitlabRepositories filePath response   ref  path params  |
+	
+	"Given"
+	hostUrl := 'www.url.com'.
+	client  := ZnClient new.
+	
+	gitlabApi := GitlabApi new privateToken: 'token'; hostUrl: hostUrl; client: client;yourself.
+	gitlabRepositories := GitlabRepositories  new gitlabAPI: gitlabApi;yourself.
+	ref:= 'branch'.
+	params := {  #ref ->   ref  } asDictionary.	
+	filePath := 'file.txt'.
+	projectId := 1 .
+
+	response := { #line -> 'a line of code'. #commit -> { #id -> '15616510' } asDictionary } asDictionary.
+   path := '/projects/', projectId asString, '/repository/files/', filePath encodeFilePath, '/blame'.
+	
+	   (gitlabRepositories stub get: path withParams: params) willReturn: (response).
+	
+	
+	"When"
+     result := gitlabRepositories getBlameOf: filePath inRef: ref ofProject: projectId.
+	
+	"Then"
+	self assert: result equals: response .
+
+]
+
+{ #category : 'tests' }
+GitlabRepositoriesTest >> testGetBlameOfInRefStartEndOfProject [
+
+
+
+| hostUrl gitlabApi projectId result client gitlabRepositories filePath response  ref  path  params |
+	
+	"Given"
+	hostUrl := 'www.url.com'.
+	client  := ZnClient new.
+	
+	gitlabApi := GitlabApi new privateToken: 'token'; hostUrl: hostUrl; client: client.
+	gitlabRepositories := GitlabRepositories new gitlabAPI: gitlabApi.
+	ref:= 'branch'.
+	
+		params := { 
+		    #ref ->   ref  .
+		    #start -> 1 .
+		    #end -> 5  
+	       } asDictionary..	
+	filePath := 'file.txt'.
+	ref:= 'branch'.
+
+	projectId := 1.
+   	path := '/projects/', projectId asString, '/repository/files/', filePath encodeFilePath, '/blame'.
+	response := '[{"line":" some lines of code for this file ","commit":{"id":"123456"}}]' .
+
+	   (gitlabRepositories stub get: path withParams: params) willReturn: (response).
+	
+	"When"
+	 result := gitlabRepositories  getBlameOf: filePath inRef: ref start:1 end:5    ofProject:projectId .
+	
+	"Then"
+	self assert: result equals: response .
+
+]
+
+{ #category : 'tests' }
 GitlabRepositoriesTest >> testGetRawFileOfProject [
 
 	| hostUrl gitlabApi projectId result client path gitlabRepositories filePath response |

@@ -1,7 +1,7 @@
 # Gitlab-Pharo-API
 
 [![Continuous](https://github.com/Evref-BL/Gitlab-Pharo-API/actions/workflows/continuous.yml/badge.svg)](https://github.com/Evref-BL/Gitlab-Pharo-API/actions/workflows/continuous.yml)
-[![Coverage Status](https://coveralls.io/repos/github/Evref-BL/Gitlab-Pharo-API/badge.svg?branch=ci-add-coverage)](https://coveralls.io/github/Evref-BL/Gitlab-Pharo-API?branch=develop)
+[![Coverage Status](https://coveralls.io/repos/github/Evref-BL/Gitlab-Pharo-API/badge.svg?branch=develop)](https://coveralls.io/github/Evref-BL/Gitlab-Pharo-API?branch=develop)
 
 This is a Pharo client for the [Gitlab REST API](https://docs.gitlab.com/ee/api/rest/)
 
@@ -9,12 +9,21 @@ This is a Pharo client for the [Gitlab REST API](https://docs.gitlab.com/ee/api/
 
 ### Installation
 
+#### From playground
+
 ```st
 Metacello new
-  githubUser: 'Evref-BL' project: 'Gitlab-Pharo-API' commitish: 'develop' path: 'src';
+  githubUser: 'Evref-BL' project: 'Gitlab-Pharo-API' commitish: 'main' path: 'src';
   baseline: 'GitlabAPI';
   onConflict: [ :ex | ex useIncoming ];
   load
+```
+
+#### Baseline dependency
+
+```st
+spec baseline: 'GitlabAPI' with: [
+	spec repository: 'github://Evref-BL/Gitlab-Pharo-API:main' ];
 ```
 
 ### Client

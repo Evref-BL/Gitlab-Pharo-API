@@ -44,3 +44,76 @@ GitlabDiscussionsTest >> testCreateThreadInMergeRequestOfProjectBodyPosition [
 	"Then"
 	self assert: (result at: #message) equals: (response at: #message).
 ]
+
+{ #category : 'tests' }
+GitlabDiscussionsTest >> testGetAllInMRInProject [
+
+	| hostUrl client gitlabApi projectId mergeRequestIID discussionId objectId object gitlabDiscussions endpoint result objectId2 object2 object3|
+	hostUrl := 'https://www.url.com'.
+	client := ZnClient new.
+
+	gitlabApi := GitlabApi new
+		             privateToken: 'token';
+		             hostUrl: hostUrl;
+		             client: client.
+	projectId := 1.
+	mergeRequestIID := 42.
+	discussionId := 'abc123'.
+
+	objectId := 'def456'.
+	object := { (#id -> objectId) } asDictionary.
+
+	objectId2 := 'abc123'.
+	object2 := { (#id -> objectId2) } asDictionary.
+
+	object3 := { object. object2 }.
+
+	gitlabDiscussions := GitlabDiscussions new gitlabAPI: gitlabApi.
+	endpoint := '/projects/' , projectId asString , '/merge_requests/' , mergeRequestIID asString , '/discussions'.
+
+	(gitlabDiscussions stub get: endpoint withParams: Dictionary new) willReturn: object3.
+
+	result := gitlabDiscussions getAllInMR: mergeRequestIID inProject: projectId.
+
+	self assert: (result first at: #id) equals: objectId.
+	self assert: result size equals: 2.
+
+]
+
+{ #category : 'tests' }
+GitlabDiscussionsTest >> testGetInMergeRequestOfProject [
+	"Given"
+
+	| hostUrl client gitlabApi projectId mergeRequestIID discussionId objectId object gitlabDiscussions endpoint result |
+	hostUrl := 'https://www.url.com'.
+	client := ZnClient new.
+
+	gitlabApi := GitlabApi new
+		             privateToken: 'token';
+		             hostUrl: hostUrl;
+		             client: client.
+
+	projectId := 1.
+	mergeRequestIID := 42.
+	discussionId := 'abc123'.
+
+	objectId := 'def456'.
+	object := { (#id -> objectId) } asDictionary.
+
+	gitlabDiscussions := GitlabDiscussions new gitlabAPI: gitlabApi.
+
+	endpoint := '/projects/' , projectId asString , '/merge_requests/'
+	            , mergeRequestIID asString , '/discussions/'
+	            , discussionId.
+	
+	(gitlabDiscussions stub get: endpoint withParams: Dictionary new)
+		willReturn: object.
+
+	result := gitlabDiscussions
+		          get: discussionId
+		          inMergeRequest: mergeRequestIID
+		          ofProject: projectId.
+
+	self assert: (result at: #id) equals: objectId
+
+]
