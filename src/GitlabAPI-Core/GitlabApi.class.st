@@ -110,6 +110,11 @@ GitlabApi >> repositories [
 ]
 
 { #category : 'ressources' }
+GitlabApi >> tags [
+	^GitlabTag new gitlabAPI: self.
+]
+
+{ #category : 'ressources' }
 GitlabApi >> users [
 	^GitlabUsers new gitlabAPI: self.
 ]
