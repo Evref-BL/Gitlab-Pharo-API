@@ -80,6 +80,15 @@ GitlabMergeRequests >> getAllOfProject: projectId withParams: paramsDict [
 	^self getAll: endpoint withParams: paramsDict.
 ]
 
+{ #category : 'searching' }
+GitlabMergeRequests >> getAllWithParams: aDictionnary [ 
+	"https://docs.gitlab.com/api/merge_requests/"
+	| endpoint |
+	endpoint := '/merge_requests/'.
+	
+	^self get: endpoint withParams: aDictionnary .
+]
+
 { #category : 'api' }
 GitlabMergeRequests >> getByPage: page perPage: perPage inProject: projectId [
 	
@@ -87,18 +96,17 @@ GitlabMergeRequests >> getByPage: page perPage: perPage inProject: projectId [
 	
 	endpoint := '/projects/', projectId asString, '/merge_requests'.
 	
-
 	^ self getByPage: page perPage: perPage from: endpoint withParams: Dictionary new . 
 ]
 
 { #category : 'searching' }
 GitlabMergeRequests >> search: aString [ 
 	"https://docs.gitlab.com/api/merge_requests/#list-merge-requests"
-	| endpoint param|
-	endpoint := '/merge_requests/'.
+	| param|
+
 	param := { #search -> aString asString.
 				  #in -> 'title,description'.
 				#scope -> 'all' } asDictionary.
 	
-	^self get: endpoint withParams: param .
+	^self getAllWithParams: param.
 ]
