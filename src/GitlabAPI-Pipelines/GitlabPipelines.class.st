@@ -92,3 +92,13 @@ GitlabPipelines >> getByPage: page perPage: perPage inProject: projectId withNam
 	
 	^ self getByPage: page perPage: perPage from: endpoint withParams: params . 
 ]
+
+{ #category : 'api' }
+GitlabPipelines >> post: projectId withVariables: aVariableDictionary [
+	"https://docs.gitlab.com/ci/triggers/#trigger-a-pipeline"
+	
+	| endpoint |
+	endpoint := '/projects/', projectId asString, '/trigger/pipeline'.
+
+	^ self post: endpoint withFormData: aVariableDictionary
+]

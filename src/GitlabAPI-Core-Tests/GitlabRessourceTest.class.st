@@ -275,3 +275,34 @@ GitlabRessourceTest >> testPostWithData [
 		self assert: (client request url query at: key) equals: (data at: key).
 	].
 ]
+
+{ #category : 'tests' }
+GitlabRessourceTest >> testPostWithFormData [
+
+	| hostUrl gitlabApi result client endpoint gitlabRessource data responseMessage response |
+	
+	"Given"
+	hostUrl := 'https://www.url.com'.
+	client := ZnClient new.
+	
+	gitlabApi := GitlabApi new privateToken: 'token'; hostUrl: hostUrl; client: client.
+	
+	endpoint := '/endpoint'.
+	data := { 'param' -> 'value' } asDictionary.
+	
+	responseMessage := 'success'.
+	response := '{ "message": "', responseMessage, '" }'.
+	
+	gitlabRessource := GitlabRessource new gitlabAPI: gitlabApi.
+	
+	(client stub post) willReturn: response.
+	
+	"When"
+	result := gitlabRessource post: endpoint withFormData: data.
+	
+	"Then"
+	self assert: (result at: #message) equals: responseMessage.
+	data keysAndValuesDo: [ :key :value | 
+		self assert: (client request entity fields at: key) equals: (data at: key).
+	].
+]
