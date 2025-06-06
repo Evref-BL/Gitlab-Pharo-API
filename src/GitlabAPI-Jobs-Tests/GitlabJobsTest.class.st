@@ -31,7 +31,7 @@ GitlabJobsTest >> testAllForPipelineInProject [
 	(gitlabJobs stub getAll: endpoint withParams: Dictionary new) willReturn: { object }.
 	
 	"When"
-	result := gitlabJobs allForPipeline: pipelineId inProject: projectId.
+	result := gitlabJobs getAllForPipeline: pipelineId inProject: projectId.
 	
 	"Then"
 	self assert: result size equals: 1.
