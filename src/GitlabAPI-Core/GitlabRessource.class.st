@@ -39,6 +39,7 @@ GitlabRessource >> getAll: endpoint withParams: paramsDict [
 
 	[
 	| response responseDict |
+
 	response := self
 		            getByPage: currentPage
 		            perPage: itemPerPage
