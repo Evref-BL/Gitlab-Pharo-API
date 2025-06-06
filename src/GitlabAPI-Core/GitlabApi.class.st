@@ -105,8 +105,18 @@ GitlabApi >> projects [
 ]
 
 { #category : 'ressources' }
+GitlabApi >> releases [
+	^GitlabRelease new gitlabAPI: self.
+]
+
+{ #category : 'ressources' }
 GitlabApi >> repositories [
 	^GitlabRepositories new gitlabAPI: self.
+]
+
+{ #category : 'ressources' }
+GitlabApi >> tags [
+	^GitlabTag new gitlabAPI: self.
 ]
 
 { #category : 'ressources' }
