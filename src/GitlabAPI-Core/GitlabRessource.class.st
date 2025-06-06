@@ -2,11 +2,17 @@ Class {
 	#name : 'GitlabRessource',
 	#superclass : 'Object',
 	#instVars : [
-		'gitlabAPI'
+		'gitlabAPI',
+		'itemPerPage'
 	],
 	#category : 'GitlabAPI-Core',
 	#package : 'GitlabAPI-Core'
 }
+
+{ #category : 'initialization' }
+GitlabRessource >> defaultPerPageItem [
+	^ 20.
+]
 
 { #category : 'api' }
 GitlabRessource >> get: endpoint withParams: paramsDict [
@@ -33,9 +39,11 @@ GitlabRessource >> getAll: endpoint withParams: paramsDict [
 
 	[
 	| response responseDict |
+	
+	
 	response := self
 		            getByPage: currentPage
-		            perPage: 20
+		            perPage: itemPerPage
 		            from: endpoint
 		            withParams: paramsDict.
 	(response isEmpty or: response = '[]') ifTrue: [ ^ results ].
@@ -72,12 +80,29 @@ GitlabRessource >> gitlabAPI: anObject [
 	gitlabAPI := anObject
 ]
 
+{ #category : 'initialization' }
+GitlabRessource >> initialize [ 
+	itemPerPage := self defaultPerPageItem
+]
+
 { #category : 'api' }
 GitlabRessource >> post: endpoint withData: data [
 	| response |
 	gitlabAPI client path: gitlabAPI hostUrl, endpoint.
 	
 	data keysAndValuesDo: [ :key :value | gitlabAPI client queryAt: key put: value ].
+	
+	response := gitlabAPI client post.
+	
+	^NeoJSONReader fromString: response. 
+]
+
+{ #category : 'api' }
+GitlabRessource >> post: endpoint withFormData: data [
+	| response |
+	gitlabAPI client path: gitlabAPI hostUrl, endpoint.
+	
+	data keysAndValuesDo: [ :key :value | gitlabAPI client formAt: key put: value ].
 	
 	response := gitlabAPI client post.
 	

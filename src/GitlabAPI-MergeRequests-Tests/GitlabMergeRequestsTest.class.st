@@ -9,67 +9,6 @@ Class {
 }
 
 { #category : 'tests' }
-GitlabMergeRequestsTest >> testAllOfProject [
-
-	| hostUrl gitlabApi result client objectId object projectId gitlabMergeRequests |
-	
-	"Given"
-	hostUrl := 'https://www.url.com'.
-	client := ZnClient new.
-	
-	gitlabApi := GitlabApi new privateToken: 'token'; hostUrl: hostUrl; client: client.
-	
-	projectId := 1.
-	
-	objectId := 1.
-	object := { #id -> objectId } asDictionary.
-	
-	gitlabMergeRequests := GitlabMergeRequests new gitlabAPI: gitlabApi.
-	
-	(gitlabMergeRequests stub allOfProject: projectId withParams: Dictionary new) willReturn: { object }.
-	
-	"When"
-	result := gitlabMergeRequests allOfProject: projectId. 
-	
-	"Then"
-	self assert: result size equals: 1.
-	self assert: (result first at: #id) equals: objectId.
-]
-
-{ #category : 'tests' }
-GitlabMergeRequestsTest >> testAllOfProjectWithParams [
-
-	| hostUrl gitlabApi result client objectId object endpoint projectId gitlabMergeRequests params |
-	
-	"Given"
-	hostUrl := 'https://www.url.com'.
-	client := ZnClient new.
-	
-	gitlabApi := GitlabApi new privateToken: 'token'; hostUrl: hostUrl; client: client.
-	
-	projectId := 1.
-	
-	params := { 
-		'param' -> 'params' 
-	} asDictionary.
-	
-	objectId := 1.
-	object := { #id -> objectId } asDictionary.
-	
-	gitlabMergeRequests := GitlabMergeRequests new gitlabAPI: gitlabApi.
-	
-	endpoint := '/projects/', projectId asString, '/merge_requests'.
-	(gitlabMergeRequests stub getAll: endpoint withParams: params) willReturn: { object }.
-	
-	"When"
-	result := gitlabMergeRequests allOfProject: projectId withParams: params. 
-	
-	"Then"
-	self assert: result size equals: 1.
-	self assert: (result first at: #id) equals: objectId.
-]
-
-{ #category : 'tests' }
 GitlabMergeRequestsTest >> testApprovalsOfInProject [
 
 	| hostUrl gitlabApi projectId result client gitlabMergeRequests mergeRequestIID path mergeRequest |
@@ -206,6 +145,67 @@ GitlabMergeRequestsTest >> testDiffsOfInProject [
 	self assert: (result size) equals: 2.
 	self assert: (result first) equals: diff1.
 	self assert: (result last) equals: diff2.
+]
+
+{ #category : 'tests' }
+GitlabMergeRequestsTest >> testGetAllOfProject [
+
+	| hostUrl gitlabApi result client objectId object projectId gitlabMergeRequests |
+	
+	"Given"
+	hostUrl := 'https://www.url.com'.
+	client := ZnClient new.
+	
+	gitlabApi := GitlabApi new privateToken: 'token'; hostUrl: hostUrl; client: client.
+	
+	projectId := 1.
+	
+	objectId := 1.
+	object := { #id -> objectId } asDictionary.
+	
+	gitlabMergeRequests := GitlabMergeRequests new gitlabAPI: gitlabApi.
+	
+	(gitlabMergeRequests stub getAllOfProject: projectId withParams: Dictionary new) willReturn: { object }.
+	
+	"When"
+	result := gitlabMergeRequests getAllOfProject: projectId. 
+	
+	"Then"
+	self assert: result size equals: 1.
+	self assert: (result first at: #id) equals: objectId.
+]
+
+{ #category : 'tests' }
+GitlabMergeRequestsTest >> testGetAllOfProjectWithParams [
+
+	| hostUrl gitlabApi result client objectId object endpoint projectId gitlabMergeRequests params |
+	
+	"Given"
+	hostUrl := 'https://www.url.com'.
+	client := ZnClient new.
+	
+	gitlabApi := GitlabApi new privateToken: 'token'; hostUrl: hostUrl; client: client.
+	
+	projectId := 1.
+	
+	params := { 
+		'param' -> 'params' 
+	} asDictionary.
+	
+	objectId := 1.
+	object := { #id -> objectId } asDictionary.
+	
+	gitlabMergeRequests := GitlabMergeRequests new gitlabAPI: gitlabApi.
+	
+	endpoint := '/projects/', projectId asString, '/merge_requests'.
+	(gitlabMergeRequests stub getAll: endpoint withParams: params) willReturn: { object }.
+	
+	"When"
+	result := gitlabMergeRequests getAllOfProject: projectId withParams: params. 
+	
+	"Then"
+	self assert: result size equals: 1.
+	self assert: (result first at: #id) equals: objectId.
 ]
 
 { #category : 'tests' }
