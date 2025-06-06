@@ -39,7 +39,8 @@ GitlabRessource >> getAll: endpoint withParams: paramsDict [
 
 	[
 	| response responseDict |
-
+	
+	
 	response := self
 		            getByPage: currentPage
 		            perPage: itemPerPage
@@ -79,18 +80,11 @@ GitlabRessource >> gitlabAPI: anObject [
 	gitlabAPI := anObject
 ]
 
-{ #category : 'api' }
-GitlabRessource >> post: endpoint withFormData: data [
-	| response |
-	gitlabAPI client path: gitlabAPI hostUrl, endpoint.
-	
-	data keysAndValuesDo: [ :key :value | gitlabAPI client formAt: key put: value ].
-	
-	response := gitlabAPI client post.
-	
-	^NeoJSONReader fromString: response. 
+{ #category : 'initialization' }
+GitlabRessource >> initialize [ 
+	itemPerPage := self defaultPerPageItem
 ]
-  
+
 { #category : 'api' }
 GitlabRessource >> post: endpoint withData: data [
 	| response |
@@ -103,11 +97,18 @@ GitlabRessource >> post: endpoint withData: data [
 	^NeoJSONReader fromString: response. 
 ]
 
-{ #category : 'initialization' }
-GitlabRessource >> initialize [ 
-	itemPerPage := self defaultPerPageItem
+{ #category : 'api' }
+GitlabRessource >> post: endpoint withFormData: data [
+	| response |
+	gitlabAPI client path: gitlabAPI hostUrl, endpoint.
+	
+	data keysAndValuesDo: [ :key :value | gitlabAPI client formAt: key put: value ].
+	
+	response := gitlabAPI client post.
+	
+	^NeoJSONReader fromString: response. 
 ]
-  
+
 { #category : 'api' }
 GitlabRessource >> postJson: endpoint withData: data [
 	| response |
