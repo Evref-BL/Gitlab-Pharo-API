@@ -98,6 +98,18 @@ GitlabRessource >> post: endpoint withData: data [
 ]
 
 { #category : 'api' }
+GitlabRessource >> post: endpoint withFormData: data [
+	| response |
+	gitlabAPI client path: gitlabAPI hostUrl, endpoint.
+	
+	data keysAndValuesDo: [ :key :value | gitlabAPI client formAt: key put: value ].
+	
+	response := gitlabAPI client post.
+	
+	^NeoJSONReader fromString: response. 
+]
+
+{ #category : 'api' }
 GitlabRessource >> postJson: endpoint withData: data [
 	| response |
 	gitlabAPI client path: gitlabAPI hostUrl, endpoint.
