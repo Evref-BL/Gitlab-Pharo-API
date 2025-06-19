@@ -47,7 +47,7 @@ GitlabMergeRequests >> diffsOf: mergeRequestIID inProject: projectId [
 	| endpoint |
 	endpoint := '/projects/', projectId asString, '/merge_requests/', mergeRequestIID asString, '/diffs'.
 	
-	^self get: endpoint withParams: Dictionary new.
+	^self getAll: endpoint withParams: Dictionary new.
 ]
 
 { #category : 'api' }

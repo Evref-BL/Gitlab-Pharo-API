@@ -136,7 +136,7 @@ GitlabMergeRequestsTest >> testDiffsOfInProject [
 	}.
 	
 	path := '/projects/', projectId asString, '/merge_requests/', mergeRequestIID asString, '/diffs'.
-	(gitlabMergeRequests stub get: path withParams: Dictionary new) willReturn: diffs.
+	(gitlabMergeRequests stub getAll: path withParams: Dictionary new) willReturn: diffs.
 	
 	"When"
 	result := gitlabMergeRequests diffsOf: mergeRequestIID inProject: projectId.
