@@ -39,3 +39,23 @@ GitlabJobs >> getAllForPipeline: pipelineId inProject: projectId includingRetrie
 	
 	^self getAll: endpoint withParams: params
 ]
+
+{ #category : 'api' }
+GitlabJobs >> getByPage: page perPage: perPage inProject: projectId [
+
+	^ self
+		  getByPage: page
+		  perPage: perPage
+		  inProject: projectId
+		  withParams: Dictionary new
+]
+
+{ #category : 'api' }
+GitlabJobs >> getByPage: page perPage: perPage inProject: projectId withParams: params [
+
+	^ self
+		  getByPage: page
+		  perPage: perPage
+		  from: '/projects/' , projectId asString , '/jobs'
+		  withParams: params
+]
