@@ -7,8 +7,9 @@ Class {
 
 { #category : 'api' }
 GitlabTag >> getAllOfProject: aProjectId [
-		| endpoint |
-	endpoint := '/projects/' , aProjectId asString, '/repository/tags'.
-	
-	^self getAll: endpoint withParams: Dictionary new.
+
+	| endpoint |
+	endpoint := '/projects/' , aProjectId asString , '/repository/tags'.
+
+	^ self getAll: endpoint withParams: Dictionary new
 ]

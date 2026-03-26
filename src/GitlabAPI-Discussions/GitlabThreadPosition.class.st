@@ -21,34 +21,46 @@ Class {
 
 { #category : 'instance creation' }
 GitlabThreadPosition class >> createWithBaseSha: baseSha startSha: startSha headSha: headSha filePath: filePath [
-	^self new baseSha: baseSha; startSha: startSha; headSha: headSha; oldPath: filePath; newPath: filePath; type: 'text'
+
+	^ self new
+		  baseSha: baseSha;
+		  startSha: startSha;
+		  headSha: headSha;
+		  oldPath: filePath;
+		  newPath: filePath;
+		  type: 'text'
 ]
 
 { #category : 'converting' }
 GitlabThreadPosition >> asDictionary [
+
 	| dict |
 	dict := Dictionary new.
-	
+
 	dict at: 'position[base_sha]' put: baseSha.
 	dict at: 'position[head_sha]' put: headSha.
 	dict at: 'position[start_sha]' put: startSha.
-	
+
 	dict at: 'position[position_type]' put: type.
-	
+
 	dict at: 'position[new_path]' put: newPath.
 	dict at: 'position[old_path]' put: oldPath.
-	
+
 	newLine ifNotNil: [ dict at: 'position[new_line]' put: newLine ].
 	oldLine ifNotNil: [ dict at: 'position[old_line]' put: oldLine ].
-	
+
 	"Line Range"
-	startLineCode ifNotNil: [ dict at: 'position[line_range][start][line_code]' put: startLineCode ].
-	startLineType ifNotNil: [ dict at: 'position[line_range][start][type]' put: startLineType ].
-	
-	endLineCode ifNotNil: [ dict at: 'position[line_range][end][line_code]' put: endLineCode ].
-	endLineType ifNotNil: [ dict at: 'position[line_range][end][type]' put: endLineType ].
-	
-	^dict
+	startLineCode ifNotNil: [
+		dict at: 'position[line_range][start][line_code]' put: startLineCode ].
+	startLineType ifNotNil: [
+		dict at: 'position[line_range][start][type]' put: startLineType ].
+
+	endLineCode ifNotNil: [
+		dict at: 'position[line_range][end][line_code]' put: endLineCode ].
+	endLineType ifNotNil: [
+		dict at: 'position[line_range][end][type]' put: endLineType ].
+
+	^ dict
 ]
 
 { #category : 'accessing' }
@@ -83,10 +95,11 @@ GitlabThreadPosition >> oldPath: anObject [
 
 { #category : 'initialization' }
 GitlabThreadPosition >> setLineRangeFrom: startLine withType: startType to: endLine withType: endType [
-  startLineCode := startLine.
-  startLineType := startType.
-  endLineCode := endLine.
-  endLineType := endType.
+
+	startLineCode := startLine.
+	startLineType := startType.
+	endLineCode := endLine.
+	endLineType := endType
 ]
 
 { #category : 'accessing' }

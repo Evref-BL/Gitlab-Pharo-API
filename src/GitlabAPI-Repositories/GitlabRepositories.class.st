@@ -8,72 +8,74 @@ Class {
 { #category : 'api' }
 GitlabRepositories >> compareInProject: projectId from: fromSHA to: toSHA [
 	"https://docs.gitlab.com/ee/api/repositories.html#compare-branches-tags-or-commits"
-	
+
 	| endpoint params |
-	endpoint := '/projects/', projectId asString, '/repository/compare'.
-	
-	params := { 
-		#from -> fromSHA.
-		#to  -> toSHA
-	} asDictionary.
-	
-	^self get: endpoint withParams: params. 
+	endpoint := '/projects/' , projectId asString , '/repository/compare'.
+
+	params := {
+		          (#from -> fromSHA).
+		          (#to -> toSHA) } asDictionary.
+
+	^ self get: endpoint withParams: params
 ]
 
 { #category : 'api' }
 GitlabRepositories >> getBlameOf: filePath inRef: ref ofProject: projectId [
 
-	| endpoint params  |
-		params := { 
-		    #ref ->   ref  .
-	       } asDictionary.		
-	  endpoint := '/projects/', projectId asString, '/repository/files/', filePath encodeFilePath, '/blame'.
-	
-	 	^self get: endpoint withParams: params   .
+	| endpoint params |
+	params := { (#ref -> ref) } asDictionary.
+	endpoint := '/projects/' , projectId asString , '/repository/files/'
+	            , filePath encodeFilePath , '/blame'.
+
+	^ self get: endpoint withParams: params
 ]
 
 { #category : 'api' }
-GitlabRepositories >> getBlameOf: filePath inRef: ref start:startRange end: endRange ofProject:projectId [
-	| endpoint params  |
-		params := { 
-		    #ref ->   ref  .
-		    #start -> startRange .
-		    #end -> endRange 
-	       } asDictionary.		
-	  endpoint := '/projects/', projectId asString, '/repository/files/', filePath encodeFilePath, '/blame'.
-	
-	 	^self get: endpoint withParams: params   .
+GitlabRepositories >> getBlameOf: filePath inRef: ref start: startRange end: endRange ofProject: projectId [
+
+	| endpoint params |
+	params := {
+		          (#ref -> ref).
+		          (#start -> startRange).
+		          (#end -> endRange) } asDictionary.
+	endpoint := '/projects/' , projectId asString , '/repository/files/'
+	            , filePath encodeFilePath , '/blame'.
+
+	^ self get: endpoint withParams: params
 ]
 
 { #category : 'api' }
 GitlabRepositories >> getRawFile: filePath ofProject: projectId [
 	"https://docs.gitlab.com/ee/api/repository_files.html#get-raw-file-from-repository"
-	
+
 	| endpoint |
-	endpoint := '/projects/', projectId asString, '/repository/files/', filePath encodeFilePath, '/raw'.
-	
-	^gitlabAPI client get: gitlabAPI hostUrl, endpoint
+	endpoint := '/projects/' , projectId asString , '/repository/files/'
+	            , filePath encodeFilePath , '/raw'.
+
+	^ gitlabAPI client get: gitlabAPI hostUrl , endpoint
 ]
 
 { #category : 'api' }
 GitlabRepositories >> getRawFile: filePath ofProject: projectId withParams: paramsDict [
 	"https://docs.gitlab.com/ee/api/repository_files.html#get-raw-file-from-repository"
-	
+
 	| endpoint |
-	endpoint := '/projects/', projectId asString, '/repository/files/', filePath encodeFilePath, '/raw'.
-	
-	gitlabAPI client path: gitlabAPI hostUrl, endpoint.
-	paramsDict keysAndValuesDo: [ :key :value | gitlabAPI client queryAt: key put: value ].
-	
-	^gitlabAPI client get.
+	endpoint := '/projects/' , projectId asString , '/repository/files/'
+	            , filePath encodeFilePath , '/raw'.
+
+	gitlabAPI client path: gitlabAPI hostUrl , endpoint.
+	paramsDict keysAndValuesDo: [ :key :value |
+		gitlabAPI client queryAt: key put: value ].
+
+	^ gitlabAPI client get
 ]
 
 { #category : 'api' }
 GitlabRepositories >> repositoryTreeOfProject: projectId withParams: paramsDict [
 	"https://docs.gitlab.com/ee/api/repositories.html#list-repository-tree"
-	
+
 	| endpoint |
-	endpoint := '/projects/', projectId asString, '/repository/tree'.
-	
-	^self getAll: endpoint withParams: paramsDict. 
+	endpoint := '/projects/' , projectId asString , '/repository/tree'.
+
+	^ self getAll: endpoint withParams: paramsDict
 ]
