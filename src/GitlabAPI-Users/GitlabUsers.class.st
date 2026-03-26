@@ -8,11 +8,11 @@ Class {
 { #category : 'api' }
 GitlabUsers >> allWithParams: paramsDict [
 	"https://docs.gitlab.com/ee/api/users.html#list-users"
-	
+
 	| endpoint |
 	endpoint := '/users'.
-	
-	^self getAll: endpoint withParams: paramsDict. 
+
+	^ self getAll: endpoint withParams: paramsDict
 ]
 
 { #category : 'api' }
@@ -20,7 +20,7 @@ GitlabUsers >> get: userId [
 	"https://docs.gitlab.com/ee/api/users.html#get-a-single-user"
 
 	| endpoint |
-	endpoint := '/users/', userId asString.
-	
-	^self get: endpoint withParams: Dictionary new.
+	endpoint := '/users/' , userId asString.
+
+	^ self get: endpoint withParams: Dictionary new
 ]

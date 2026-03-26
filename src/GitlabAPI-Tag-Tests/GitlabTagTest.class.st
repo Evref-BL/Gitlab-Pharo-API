@@ -43,23 +43,27 @@ GitlabTagTest >> exampleReturnApi [
 GitlabTagTest >> testGetAllOfProject [
 
 	| hostUrl gitlabApi client endpoint projectId tags api |
-	
 	"Given"
 	hostUrl := 'https://www.url.com'.
 	client := ZnClient new.
-	
-	gitlabApi := GitlabApi new privateToken: 'token'; hostUrl: hostUrl; client: client.
-	
+
+	gitlabApi := GitlabApi new
+		             privateToken: 'token';
+		             hostUrl: hostUrl;
+		             client: client.
+
 	projectId := 1.
-	
+
 	api := GitlabTag new gitlabAPI: gitlabApi.
-	
-	endpoint := '/projects/{1}/repository/tags' format: {projectId asString}.
-	(api stub getAll: endpoint withParams: Dictionary new) willReturn: (NeoJSONReader fromString: self exampleReturnApi).
-	
+
+	endpoint := '/projects/{1}/repository/tags' format:
+		            { projectId asString }.
+	(api stub getAll: endpoint withParams: Dictionary new) willReturn:
+		(NeoJSONReader fromString: self exampleReturnApi).
+
 	"When"
 	tags := api getAllOfProject: projectId.
-	
+
 	"Then"
-	self assert:  (tags first at:#name )    equals: 'v1.0.0'.
+	self assert: (tags first at: #name) equals: 'v1.0.0'
 ]

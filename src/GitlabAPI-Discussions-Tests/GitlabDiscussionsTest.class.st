@@ -10,45 +10,54 @@ Class {
 
 { #category : 'tests' }
 GitlabDiscussionsTest >> testCreateThreadInMergeRequestOfProjectBodyPosition [
+
 	| hostUrl gitlabApi result client endpoint projectId mergeRequestIID body position data gitlabDiscussions response |
-	
 	"Given"
 	hostUrl := 'https://www.url.com'.
 	client := ZnClient new.
-	
-	gitlabApi := GitlabApi new privateToken: 'token'; hostUrl: hostUrl; client: client.
-	
+
+	gitlabApi := GitlabApi new
+		             privateToken: 'token';
+		             hostUrl: hostUrl;
+		             client: client.
+
 	projectId := 1.
 	mergeRequestIID := 1.
 	body := 'content'.
-	position := GitlabThreadPosition createWithBaseSha: 'baseSha' startSha: 'startSha'  headSha: 'headSha'  filePath: 'file.txt'. 
-	
-	data := { 
-		#body -> body.
-	 } asDictionary.
-	
+	position := GitlabThreadPosition
+		            createWithBaseSha: 'baseSha'
+		            startSha: 'startSha'
+		            headSha: 'headSha'
+		            filePath: 'file.txt'.
+
+	data := { (#body -> body) } asDictionary.
+
 	data addAll: position asDictionary.
-	
+
 	gitlabDiscussions := GitlabDiscussions new gitlabAPI: gitlabApi.
-	
-	response := { 
-		#message -> 'message' 
-	} asDictionary.
-	
-	endpoint := '/projects/', projectId asString, '/merge_requests/', mergeRequestIID asString, '/discussions'.
-	(gitlabDiscussions stub post: endpoint withData: data) willReturn: response.
-	
+
+	response := { (#message -> 'message') } asDictionary.
+
+	endpoint := '/projects/' , projectId asString , '/merge_requests/'
+	            , mergeRequestIID asString , '/discussions'.
+	(gitlabDiscussions stub post: endpoint withData: data) willReturn:
+		response.
+
 	"When"
-	result := gitlabDiscussions createThreadInMergeRequest: mergeRequestIID ofProject: projectId body: body position: position. 
-	
+	result := gitlabDiscussions
+		          createThreadInMergeRequest: mergeRequestIID
+		          ofProject: projectId
+		          body: body
+		          position: position.
+
 	"Then"
-	self assert: (result at: #message) equals: (response at: #message).
+	self assert: (result at: #message) equals: (response at: #message)
 ]
 
 { #category : 'tests' }
 GitlabDiscussionsTest >> testGetAllInMRInProject [
 
-	| hostUrl client gitlabApi projectId mergeRequestIID discussionId objectId object gitlabDiscussions endpoint result objectId2 object2 object3|
+	| hostUrl client gitlabApi projectId mergeRequestIID discussionId objectId object gitlabDiscussions endpoint result objectId2 object2 object3 |
 	hostUrl := 'https://www.url.com'.
 	client := ZnClient new.
 
@@ -66,18 +75,23 @@ GitlabDiscussionsTest >> testGetAllInMRInProject [
 	objectId2 := 'abc123'.
 	object2 := { (#id -> objectId2) } asDictionary.
 
-	object3 := { object. object2 }.
+	object3 := {
+		           object.
+		           object2 }.
 
 	gitlabDiscussions := GitlabDiscussions new gitlabAPI: gitlabApi.
-	endpoint := '/projects/' , projectId asString , '/merge_requests/' , mergeRequestIID asString , '/discussions'.
+	endpoint := '/projects/' , projectId asString , '/merge_requests/'
+	            , mergeRequestIID asString , '/discussions'.
 
-	(gitlabDiscussions stub get: endpoint withParams: Dictionary new) willReturn: object3.
+	(gitlabDiscussions stub get: endpoint withParams: Dictionary new)
+		willReturn: object3.
 
-	result := gitlabDiscussions getAllInMR: mergeRequestIID inProject: projectId.
+	result := gitlabDiscussions
+		          getAllInMR: mergeRequestIID
+		          inProject: projectId.
 
 	self assert: (result first at: #id) equals: objectId.
-	self assert: result size equals: 2.
-
+	self assert: result size equals: 2
 ]
 
 { #category : 'tests' }
@@ -105,7 +119,7 @@ GitlabDiscussionsTest >> testGetInMergeRequestOfProject [
 	endpoint := '/projects/' , projectId asString , '/merge_requests/'
 	            , mergeRequestIID asString , '/discussions/'
 	            , discussionId.
-	
+
 	(gitlabDiscussions stub get: endpoint withParams: Dictionary new)
 		willReturn: object.
 
@@ -115,5 +129,4 @@ GitlabDiscussionsTest >> testGetInMergeRequestOfProject [
 		          ofProject: projectId.
 
 	self assert: (result at: #id) equals: objectId
-
 ]

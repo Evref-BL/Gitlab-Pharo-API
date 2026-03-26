@@ -10,41 +10,44 @@ Class {
 
 { #category : 'tests' }
 GitlabActionTest >> testAsDictionary [
-
 	"Given"
+
 	| action filePath content gitlabAction dict |
 	action := 'update'.
 	filePath := 'file.txt'.
 	content := 'content'.
-	
-	gitlabAction := GitlabAction new action: action; content: content; filePath: filePath.
-	
+
+	gitlabAction := GitlabAction new
+		                action: action;
+		                content: content;
+		                filePath: filePath.
+
 	"When"
 	dict := gitlabAction asDictionary.
-	
+
 	"Then"
 	self assert: (dict at: #action) equals: action.
 	self assert: (dict at: #file_path) equals: filePath.
-	self assert: (dict at: #content) equals: content.
-	 
+	self assert: (dict at: #content) equals: content
 ]
 
 { #category : 'tests' }
 GitlabActionTest >> testAsDictionaryWithoutParams [
-
 	"Given"
+
 	| action filePath gitlabAction dict |
 	action := 'update'.
 	filePath := 'file.txt'.
-	
-	gitlabAction := GitlabAction new action: action; filePath: filePath.
-	
+
+	gitlabAction := GitlabAction new
+		                action: action;
+		                filePath: filePath.
+
 	"When"
 	dict := gitlabAction asDictionary.
-	
+
 	"Then"
 	self assert: (dict at: #action) equals: action.
 	self assert: (dict at: #file_path) equals: filePath.
-	self assert: (dict includesKey: #content) equals: false.
-	 
+	self assert: (dict includesKey: #content) equals: false
 ]
