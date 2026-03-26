@@ -11,19 +11,22 @@ GitlabBranches >> create: name inProject: projectId fromRef: ref [
 
 	| response |
 	gitlabAPI client url:
-		gitlabAPI hostUrl , '/projects/' , projectId asString , '/repository/branches'.
+		gitlabAPI hostUrl , '/projects/' , projectId asString
+		, '/repository/branches'.
 	gitlabAPI client queryAt: #branch put: name.
 	gitlabAPI client queryAt: #ref put: ref.
 	response := gitlabAPI client post.
-	
-	^NeoJSONReader fromString: response.
+
+	^ NeoJSONReader fromString: response
 ]
 
 { #category : 'api' }
 GitlabBranches >> getAllFromProject: projectId [
-	"https://docs.gitlab.com/ee/api/branches.html#list-repository-branches"	
+	"https://docs.gitlab.com/ee/api/branches.html#list-repository-branches"
+
 	| endpoint |
-	endpoint := '/projects/', projectId asString, '/repository/branches'.
-		
-	^self getAll: endpoint withParams: Dictionary new.
+	endpoint := '/projects/' , projectId asString
+	            , '/repository/branches'.
+
+	^ self getAll: endpoint withParams: Dictionary new
 ]

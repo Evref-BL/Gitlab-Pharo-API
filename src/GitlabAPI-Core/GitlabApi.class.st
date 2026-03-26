@@ -13,7 +13,8 @@ Class {
 
 { #category : 'ressources' }
 GitlabApi >> branches [
-	^GitlabBranches new gitlabAPI: self.
+
+	^ GitlabBranches new gitlabAPI: self
 ]
 
 { #category : 'accessing' }
@@ -30,17 +31,20 @@ GitlabApi >> client: anObject [
 
 { #category : 'ressources' }
 GitlabApi >> commits [
-	^GitlabCommits new gitlabAPI: self.
+
+	^ GitlabCommits new gitlabAPI: self
 ]
 
 { #category : 'ressources' }
 GitlabApi >> discussions [
-	^GitlabDiscussions new gitlabAPI: self.
+
+	^ GitlabDiscussions new gitlabAPI: self
 ]
 
 { #category : 'ressources' }
 GitlabApi >> groups [
-	^GitlabGroups new gitlabAPI: self.
+
+	^ GitlabGroups new gitlabAPI: self
 ]
 
 { #category : 'accessing' }
@@ -57,22 +61,28 @@ GitlabApi >> hostUrl: anObject [
 
 { #category : 'initialization' }
 GitlabApi >> initialize [
-	client := (ZnClient new accept: ZnMimeType applicationJson; yourself)
+
+	client := ZnClient new
+		          accept: ZnMimeType applicationJson;
+		          yourself
 ]
 
 { #category : 'ressources' }
 GitlabApi >> jobs [
-	^GitlabJobs new gitlabAPI: self.
+
+	^ GitlabJobs new gitlabAPI: self
 ]
 
 { #category : 'ressources' }
 GitlabApi >> mergeRequests [
-	^GitlabMergeRequests new gitlabAPI: self.
+
+	^ GitlabMergeRequests new gitlabAPI: self
 ]
 
 { #category : 'ressources' }
 GitlabApi >> notes [
-	^GitlabNotes new gitlabAPI: self.
+
+	^ GitlabNotes new gitlabAPI: self
 ]
 
 { #category : 'accessing' }
@@ -89,37 +99,43 @@ GitlabApi >> output: anObject [
 
 { #category : 'ressources' }
 GitlabApi >> pipelines [
-	^GitlabPipelines new gitlabAPI: self.
+
+	^ GitlabPipelines new gitlabAPI: self
 ]
 
 { #category : 'accessing' }
-GitlabApi >> privateToken: anObject [ 
+GitlabApi >> privateToken: anObject [
 
-	client headerAt: #'PRIVATE-TOKEN' add: anObject. 
+	client headerAt: #'PRIVATE-TOKEN' add: anObject.
 	privateToken := anObject
 ]
 
 { #category : 'ressources' }
 GitlabApi >> projects [
-	^GitlabProjects new gitlabAPI: self.
+
+	^ GitlabProjects new gitlabAPI: self
 ]
 
 { #category : 'ressources' }
 GitlabApi >> releases [
-	^GitlabRelease new gitlabAPI: self.
+
+	^ GitlabRelease new gitlabAPI: self
 ]
 
 { #category : 'ressources' }
 GitlabApi >> repositories [
-	^GitlabRepositories new gitlabAPI: self.
+
+	^ GitlabRepositories new gitlabAPI: self
 ]
 
 { #category : 'ressources' }
 GitlabApi >> tags [
-	^GitlabTag new gitlabAPI: self.
+
+	^ GitlabTag new gitlabAPI: self
 ]
 
 { #category : 'ressources' }
 GitlabApi >> users [
-	^GitlabUsers new gitlabAPI: self.
+
+	^ GitlabUsers new gitlabAPI: self
 ]

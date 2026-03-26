@@ -11,23 +11,23 @@ Class {
 
 { #category : 'initialization' }
 GitlabRessource >> defaultPerPageItem [
-	^ 20.
+
+	^ 20
 ]
 
 { #category : 'api' }
 GitlabRessource >> get: endpoint withParams: paramsDict [
+
 	| response |
-	
-	gitlabAPI client path: gitlabAPI hostUrl, endpoint.
-	paramsDict keysAndValuesDo: [ :key :value | gitlabAPI client queryAt: key put: value ].
+	gitlabAPI client path: gitlabAPI hostUrl , endpoint.
+	paramsDict keysAndValuesDo: [ :key :value |
+		gitlabAPI client queryAt: key put: value ].
 
 	response := gitlabAPI client get.
 
-	gitlabAPI output = 'json' ifTrue: [ ^response ].
-	
-	^NeoJSONReader fromString: response. 
-	
-	
+	gitlabAPI output = 'json' ifTrue: [ ^ response ].
+
+	^ NeoJSONReader fromString: response
 ]
 
 { #category : 'api' }
@@ -39,8 +39,6 @@ GitlabRessource >> getAll: endpoint withParams: paramsDict [
 
 	[
 	| response responseDict |
-	
-	
 	response := self
 		            getByPage: currentPage
 		            perPage: itemPerPage
@@ -52,7 +50,7 @@ GitlabRessource >> getAll: endpoint withParams: paramsDict [
 	responseDict := gitlabAPI output = 'json'
 		                ifTrue: [ NeoJSONReader fromString: response ]
 		                ifFalse: [ response ].
-	responseDict isArray ifFalse: [ ^response ].
+	responseDict isArray ifFalse: [ ^ response ].
 
 	gitlabAPI output = 'json'
 		ifTrue: [ results add: response ]
@@ -64,14 +62,16 @@ GitlabRessource >> getAll: endpoint withParams: paramsDict [
 
 { #category : 'api' }
 GitlabRessource >> getByPage: page perPage: perPage from: endpoint withParams: paramsDict [
+
 	| newParams |
 	newParams := Dictionary new.
 	newParams at: #page put: page.
 	newParams at: #per_page put: perPage.
-	
-	paramsDict keysAndValuesDo: [ :key :value | newParams at: key put: value ].
-	
-	^self get: endpoint withParams: newParams. 
+
+	paramsDict keysAndValuesDo: [ :key :value |
+		newParams at: key put: value ].
+
+	^ self get: endpoint withParams: newParams
 ]
 
 { #category : 'accessing' }
@@ -81,43 +81,50 @@ GitlabRessource >> gitlabAPI: anObject [
 ]
 
 { #category : 'initialization' }
-GitlabRessource >> initialize [ 
+GitlabRessource >> initialize [
+
 	itemPerPage := self defaultPerPageItem
 ]
 
 { #category : 'api' }
 GitlabRessource >> post: endpoint withData: data [
+
 	| response |
-	gitlabAPI client path: gitlabAPI hostUrl, endpoint.
-	
-	data keysAndValuesDo: [ :key :value | gitlabAPI client queryAt: key put: value ].
-	
+	gitlabAPI client path: gitlabAPI hostUrl , endpoint.
+
+	data keysAndValuesDo: [ :key :value |
+		gitlabAPI client queryAt: key put: value ].
+
 	response := gitlabAPI client post.
-	
-	^NeoJSONReader fromString: response. 
+
+	^ NeoJSONReader fromString: response
 ]
 
 { #category : 'api' }
 GitlabRessource >> post: endpoint withFormData: data [
+
 	| response |
-	gitlabAPI client path: gitlabAPI hostUrl, endpoint.
-	
-	data keysAndValuesDo: [ :key :value | gitlabAPI client formAt: key put: value ].
-	
+	gitlabAPI client path: gitlabAPI hostUrl , endpoint.
+
+	data keysAndValuesDo: [ :key :value |
+		gitlabAPI client formAt: key put: value ].
+
 	response := gitlabAPI client post.
-	
-	^NeoJSONReader fromString: response. 
+
+	^ NeoJSONReader fromString: response
 ]
 
 { #category : 'api' }
 GitlabRessource >> postJson: endpoint withData: data [
+
 	| response |
-	gitlabAPI client path: gitlabAPI hostUrl, endpoint.
-	
-	gitlabAPI client entity: (ZnEntity with: (NeoJSONWriter toString: data)).
+	gitlabAPI client path: gitlabAPI hostUrl , endpoint.
+
+	gitlabAPI client entity:
+		(ZnEntity with: (NeoJSONWriter toString: data)).
 	gitlabAPI client contentType: 'application/json'.
-	
+
 	response := gitlabAPI client post.
-	
-	^NeoJSONReader fromString: response. 
+
+	^ NeoJSONReader fromString: response
 ]
