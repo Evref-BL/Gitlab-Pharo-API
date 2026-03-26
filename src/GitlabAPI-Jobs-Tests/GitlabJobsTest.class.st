@@ -77,7 +77,7 @@ GitlabJobsTest >> testGetByPagePerPageInProject [
 { #category : 'tests' }
 GitlabJobsTest >> testGetByPagePerPageInProjectWithParams [
 
-	| gitlabApi projectId page perPage params objects object result gitlabJobs |
+	| gitlabApi projectId page perPage params objects object gitlabJobs result |
 	"Given"
 	gitlabApi := GitlabApi new
 		             privateToken: 'token';
@@ -97,7 +97,7 @@ GitlabJobsTest >> testGetByPagePerPageInProjectWithParams [
 	(gitlabJobs stub
 		 getByPage: page
 		 perPage: perPage
-		 inProject: projectId
+		 from: '/projects/' , projectId asString , '/jobs'
 		 withParams: params) willReturn: objects.
 
 	"When"
