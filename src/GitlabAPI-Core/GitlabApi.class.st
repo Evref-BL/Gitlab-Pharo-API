@@ -104,10 +104,10 @@ GitlabApi >> pipelines [
 ]
 
 { #category : 'accessing' }
-GitlabApi >> privateToken: anObject [
+GitlabApi >> privateToken: aString [
 
-	client headerAt: #'PRIVATE-TOKEN' add: anObject.
-	privateToken := anObject
+	client headerAt: #'PRIVATE-TOKEN' put: aString.
+	privateToken := aString
 ]
 
 { #category : 'ressources' }
