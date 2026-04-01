@@ -24,9 +24,9 @@ GitlabApi >> client [
 ]
 
 { #category : 'accessing' }
-GitlabApi >> client: anObject [
+GitlabApi >> client: aZnClient [
 
-	client := anObject
+	client := aZnClient
 ]
 
 { #category : 'ressources' }
@@ -62,9 +62,9 @@ GitlabApi >> hostUrl: anObject [
 { #category : 'initialization' }
 GitlabApi >> initialize [
 
-	client := ZnClient new
-		          accept: ZnMimeType applicationJson;
-		          yourself
+	(client := ZnClient new)
+		systemPolicy;
+		accept: ZnMimeType applicationJson
 ]
 
 { #category : 'ressources' }
