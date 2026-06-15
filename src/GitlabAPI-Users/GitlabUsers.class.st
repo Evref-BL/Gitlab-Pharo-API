@@ -1,6 +1,6 @@
 Class {
 	#name : 'GitlabUsers',
-	#superclass : 'GitlabRessource',
+	#superclass : 'GitlabResource',
 	#category : 'GitlabAPI-Users',
 	#package : 'GitlabAPI-Users'
 }

@@ -1,6 +1,6 @@
 Class {
 	#name : 'GitlabTagTest',
-	#superclass : 'GitlabRessource',
+	#superclass : 'GitlabResource',
 	#category : 'GitlabAPI-Tag-Tests',
 	#package : 'GitlabAPI-Tag-Tests'
 }
