@@ -1,6 +1,6 @@
 Class {
 	#name : 'GitlabMergeRequests',
-	#superclass : 'GitlabRessource',
+	#superclass : 'GitlabResource',
 	#category : 'GitlabAPI-MergeRequests',
 	#package : 'GitlabAPI-MergeRequests'
 }

@@ -24,9 +24,9 @@ GitlabApi >> client [
 ]
 
 { #category : 'accessing' }
-GitlabApi >> client: anObject [
+GitlabApi >> client: aZnClient [
 
-	client := anObject
+	client := aZnClient
 ]
 
 { #category : 'ressources' }
@@ -62,9 +62,9 @@ GitlabApi >> hostUrl: anObject [
 { #category : 'initialization' }
 GitlabApi >> initialize [
 
-	client := ZnClient new
-		          accept: ZnMimeType applicationJson;
-		          yourself
+	(client := ZnClient new)
+		systemPolicy;
+		accept: ZnMimeType applicationJson
 ]
 
 { #category : 'ressources' }
@@ -104,10 +104,10 @@ GitlabApi >> pipelines [
 ]
 
 { #category : 'accessing' }
-GitlabApi >> privateToken: anObject [
+GitlabApi >> privateToken: aString [
 
-	client headerAt: #'PRIVATE-TOKEN' add: anObject.
-	privateToken := anObject
+	client headerAt: #'PRIVATE-TOKEN' put: aString.
+	privateToken := aString
 ]
 
 { #category : 'ressources' }
