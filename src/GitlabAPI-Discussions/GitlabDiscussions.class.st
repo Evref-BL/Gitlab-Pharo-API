@@ -1,6 +1,6 @@
 Class {
 	#name : 'GitlabDiscussions',
-	#superclass : 'GitlabRessource',
+	#superclass : 'GitlabResource',
 	#category : 'GitlabAPI-Discussions',
 	#package : 'GitlabAPI-Discussions'
 }

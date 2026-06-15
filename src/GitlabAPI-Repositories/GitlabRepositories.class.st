@@ -1,6 +1,6 @@
 Class {
 	#name : 'GitlabRepositories',
-	#superclass : 'GitlabRessource',
+	#superclass : 'GitlabResource',
 	#category : 'GitlabAPI-Repositories',
 	#package : 'GitlabAPI-Repositories'
 }

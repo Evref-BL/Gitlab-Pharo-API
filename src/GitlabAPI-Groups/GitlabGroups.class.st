@@ -1,6 +1,6 @@
 Class {
 	#name : 'GitlabGroups',
-	#superclass : 'GitlabRessource',
+	#superclass : 'GitlabResource',
 	#category : 'GitlabAPI-Groups',
 	#package : 'GitlabAPI-Groups'
 }

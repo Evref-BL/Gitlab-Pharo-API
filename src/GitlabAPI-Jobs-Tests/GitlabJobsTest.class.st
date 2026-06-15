@@ -10,16 +10,13 @@ Class {
 
 { #category : 'tests' }
 GitlabJobsTest >> testAllForPipelineInProject [
+
+	| gitlabApi projectId pipelineId objectId object gitlabJobs endpoint result |
 	"Given"
-
-	| hostUrl client gitlabApi projectId pipelineId objectId object gitlabJobs endpoint result |
-	hostUrl := 'https://www.url.com'.
-	client := ZnClient new.
-
 	gitlabApi := GitlabApi new
 		             privateToken: 'token';
-		             hostUrl: hostUrl;
-		             client: client.
+		             hostUrl: 'https://www.url.com';
+		             client: ZnClient new.
 
 	projectId := 1.
 	pipelineId := 2346.
@@ -27,11 +24,11 @@ GitlabJobsTest >> testAllForPipelineInProject [
 	objectId := 1.
 	object := { (#id -> objectId) } asDictionary.
 
-	gitlabJobs := GitlabJobs new gitlabAPI: gitlabApi.
-
-
 	endpoint := '/projects/' , projectId asString , '/pipelines/'
 	            , pipelineId asString , '/jobs'.
+
+	gitlabJobs := GitlabJobs new gitlabAPI: gitlabApi.
+
 	(gitlabJobs stub getAll: endpoint withParams: Dictionary new)
 		willReturn: { object }.
 

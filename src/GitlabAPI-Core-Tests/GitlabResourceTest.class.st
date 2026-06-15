@@ -2,16 +2,16 @@
 A GitlabRessourceTest is a test class for testing the behavior of GitlabRessource
 "
 Class {
-	#name : 'GitlabRessourceTest',
+	#name : 'GitlabResourceTest',
 	#superclass : 'TestCase',
 	#category : 'GitlabAPI-Core-Tests',
 	#package : 'GitlabAPI-Core-Tests'
 }
 
 { #category : 'tests' }
-GitlabRessourceTest >> testGetAllWithParams [
+GitlabResourceTest >> testGetAllWithParams [
 
-	| hostUrl gitlabApi result client objectId object endpoint gitlabRessource params |
+	| hostUrl gitlabApi result client objectId object endpoint gitlabResource params |
 	"Given"
 	hostUrl := 'https://www.url.com'.
 	client := ZnClient new.
@@ -27,26 +27,26 @@ GitlabRessourceTest >> testGetAllWithParams [
 	objectId := 1.
 	object := { (#id -> objectId) } asDictionary.
 
-	gitlabRessource := GitlabRessource new gitlabAPI: gitlabApi.
+	gitlabResource := GitlabResource new gitlabAPI: gitlabApi.
 
-	(gitlabRessource stub
+	(gitlabResource stub
 		 getByPage: 1
 		 perPage: 20
 		 from: endpoint
 		 withParams: params) willReturn: { object }.
-	(gitlabRessource stub
+	(gitlabResource stub
 		 getByPage: 2
 		 perPage: 20
 		 from: endpoint
 		 withParams: params) willReturn: { object }.
-	(gitlabRessource stub
+	(gitlabResource stub
 		 getByPage: 3
 		 perPage: 20
 		 from: endpoint
 		 withParams: params) willReturn: {  }.
 
 	"When"
-	result := gitlabRessource getAll: endpoint withParams: params.
+	result := gitlabResource getAll: endpoint withParams: params.
 
 	"Then"
 	self assert: result size equals: 2.
@@ -54,9 +54,9 @@ GitlabRessourceTest >> testGetAllWithParams [
 ]
 
 { #category : 'tests' }
-GitlabRessourceTest >> testGetAllWithParamsIfError [
+GitlabResourceTest >> testGetAllWithParamsIfError [
 
-	| hostUrl gitlabApi result client objectId object endpoint gitlabRessource params error |
+	| hostUrl gitlabApi result client objectId object endpoint gitlabResource params error |
 	"Given"
 	hostUrl := 'https://www.url.com'.
 	client := ZnClient new.
@@ -72,29 +72,29 @@ GitlabRessourceTest >> testGetAllWithParamsIfError [
 	objectId := 1.
 	object := { (#id -> objectId) } asDictionary.
 
-	gitlabRessource := GitlabRessource new gitlabAPI: gitlabApi.
+	gitlabResource := GitlabResource new gitlabAPI: gitlabApi.
 
 	error := { (#message
 	          -> '403 Forbidden - Not authorized to access /api/v4/users') }
 		         asDictionary.
 
-	(gitlabRessource stub
+	(gitlabResource stub
 		 getByPage: 1
 		 perPage: 20
 		 from: endpoint
 		 withParams: params) willReturn: error.
 
 	"When"
-	result := gitlabRessource getAll: endpoint withParams: params.
+	result := gitlabResource getAll: endpoint withParams: params.
 
 	"Then"
 	self assert: result equals: error
 ]
 
 { #category : 'tests' }
-GitlabRessourceTest >> testGetAllWithParamsJSONOutput [
+GitlabResourceTest >> testGetAllWithParamsJSONOutput [
 
-	| hostUrl gitlabApi result client objectId object endpoint gitlabRessource params jsonObject |
+	| hostUrl gitlabApi result client objectId object endpoint gitlabResource params jsonObject |
 	"Given"
 	hostUrl := 'https://www.url.com'.
 	client := ZnClient new.
@@ -112,26 +112,26 @@ GitlabRessourceTest >> testGetAllWithParamsJSONOutput [
 	object := { (#id -> objectId) } asDictionary.
 	jsonObject := NeoJSONWriter toString: { object }.
 
-	gitlabRessource := GitlabRessource new gitlabAPI: gitlabApi.
+	gitlabResource := GitlabResource new gitlabAPI: gitlabApi.
 
-	(gitlabRessource stub
+	(gitlabResource stub
 		 getByPage: 1
 		 perPage: 20
 		 from: endpoint
 		 withParams: params) willReturn: jsonObject.
-	(gitlabRessource stub
+	(gitlabResource stub
 		 getByPage: 2
 		 perPage: 20
 		 from: endpoint
 		 withParams: params) willReturn: jsonObject.
-	(gitlabRessource stub
+	(gitlabResource stub
 		 getByPage: 3
 		 perPage: 20
 		 from: endpoint
 		 withParams: params) willReturn: '[]'.
 
 	"When"
-	result := gitlabRessource getAll: endpoint withParams: params.
+	result := gitlabResource getAll: endpoint withParams: params.
 
 	"Then"
 	self assert: result size equals: 2.
@@ -139,9 +139,9 @@ GitlabRessourceTest >> testGetAllWithParamsJSONOutput [
 ]
 
 { #category : 'tests' }
-GitlabRessourceTest >> testGetAllWithParamsJSONOutputIfError [
+GitlabResourceTest >> testGetAllWithParamsJSONOutputIfError [
 
-	| hostUrl gitlabApi result client objectId object endpoint gitlabRessource params error |
+	| hostUrl gitlabApi result client objectId object endpoint gitlabResource params error |
 	"Given"
 	hostUrl := 'https://www.url.com'.
 	client := ZnClient new.
@@ -158,25 +158,25 @@ GitlabRessourceTest >> testGetAllWithParamsJSONOutputIfError [
 	objectId := 1.
 	object := { (#id -> objectId) } asDictionary.
 
-	gitlabRessource := GitlabRessource new gitlabAPI: gitlabApi.
+	gitlabResource := GitlabResource new gitlabAPI: gitlabApi.
 
 	error := '{"message":"403 Forbidden - Not authorized to access /api/v4/users"}'.
 
-	(gitlabRessource stub
+	(gitlabResource stub
 		 getByPage: 1
 		 perPage: 20
 		 from: endpoint
 		 withParams: params) willReturn: error.
 
 	"When"
-	result := gitlabRessource getAll: endpoint withParams: params.
+	result := gitlabResource getAll: endpoint withParams: params.
 
 	"Then"
 	self assert: result equals: error
 ]
 
 { #category : 'tests' }
-GitlabRessourceTest >> testGetByPagePerPageFromWithParams [
+GitlabResourceTest >> testGetByPagePerPageFromWithParams [
 
 	| hostUrl gitlabApi result client objectId object page perPage endpoint params |
 	"Given"
@@ -199,7 +199,7 @@ GitlabRessourceTest >> testGetByPagePerPageFromWithParams [
 	client stub get willReturn: '[ ' , object , ']'.
 
 	"When"
-	result := GitlabRessource new
+	result := GitlabResource new
 		          gitlabAPI: gitlabApi;
 		          getByPage: page
 		          perPage: perPage
@@ -220,9 +220,9 @@ GitlabRessourceTest >> testGetByPagePerPageFromWithParams [
 ]
 
 { #category : 'tests' }
-GitlabRessourceTest >> testGetWithParams [
+GitlabResourceTest >> testGetWithParams [
 
-	| hostUrl gitlabApi result client object endpoint gitlabRessource params |
+	| hostUrl gitlabApi result client object endpoint gitlabResource params |
 	"Given"
 	hostUrl := 'https://www.url.com'.
 	client := ZnClient new.
@@ -237,12 +237,12 @@ GitlabRessourceTest >> testGetWithParams [
 
 	object := { (#id -> 1) } asDictionary.
 
-	gitlabRessource := GitlabRessource new gitlabAPI: gitlabApi.
+	gitlabResource := GitlabResource new gitlabAPI: gitlabApi.
 
 	client stub get willReturn: (NeoJSONWriter toString: object).
 
 	"When"
-	result := gitlabRessource get: endpoint withParams: params.
+	result := gitlabResource get: endpoint withParams: params.
 
 	"Then"
 	self assert: result equals: object.
@@ -251,9 +251,9 @@ GitlabRessourceTest >> testGetWithParams [
 ]
 
 { #category : 'tests' }
-GitlabRessourceTest >> testGetWithParamsJSONOutput [
+GitlabResourceTest >> testGetWithParamsJSONOutput [
 
-	| hostUrl gitlabApi result client object endpoint gitlabRessource params |
+	| hostUrl gitlabApi result client object endpoint gitlabResource params |
 	"Given"
 	hostUrl := 'https://www.url.com'.
 	client := ZnClient new.
@@ -269,12 +269,12 @@ GitlabRessourceTest >> testGetWithParamsJSONOutput [
 
 	object := { (#id -> 1) } asDictionary.
 
-	gitlabRessource := GitlabRessource new gitlabAPI: gitlabApi.
+	gitlabResource := GitlabResource new gitlabAPI: gitlabApi.
 
 	client stub get willReturn: (NeoJSONWriter toString: object).
 
 	"When"
-	result := gitlabRessource get: endpoint withParams: params.
+	result := gitlabResource get: endpoint withParams: params.
 
 	"Then"
 	self assert: result equals: (NeoJSONWriter toString: object).
@@ -283,9 +283,9 @@ GitlabRessourceTest >> testGetWithParamsJSONOutput [
 ]
 
 { #category : 'tests' }
-GitlabRessourceTest >> testPostJsonWithData [
+GitlabResourceTest >> testPostJsonWithData [
 
-	| hostUrl gitlabApi result client endpoint gitlabRessource data responseMessage response |
+	| hostUrl gitlabApi result client endpoint gitlabResource data responseMessage response |
 	"Given"
 	hostUrl := 'https://www.url.com'.
 	client := ZnClient new.
@@ -301,12 +301,12 @@ GitlabRessourceTest >> testPostJsonWithData [
 	responseMessage := 'success'.
 	response := '{ "message": "' , responseMessage , '" }'.
 
-	gitlabRessource := GitlabRessource new gitlabAPI: gitlabApi.
+	gitlabResource := GitlabResource new gitlabAPI: gitlabApi.
 
 	client stub post willReturn: response.
 
 	"When"
-	result := gitlabRessource postJson: endpoint withData: data.
+	result := gitlabResource postJson: endpoint withData: data.
 
 	"Then"
 	self assert: (result at: #message) equals: responseMessage.
@@ -319,9 +319,9 @@ GitlabRessourceTest >> testPostJsonWithData [
 ]
 
 { #category : 'tests' }
-GitlabRessourceTest >> testPostWithData [
+GitlabResourceTest >> testPostWithData [
 
-	| hostUrl gitlabApi result client endpoint gitlabRessource data responseMessage response |
+	| hostUrl gitlabApi result client endpoint gitlabResource data responseMessage response |
 	"Given"
 	hostUrl := 'https://www.url.com'.
 	client := ZnClient new.
@@ -337,12 +337,12 @@ GitlabRessourceTest >> testPostWithData [
 	responseMessage := 'success'.
 	response := '{ "message": "' , responseMessage , '" }'.
 
-	gitlabRessource := GitlabRessource new gitlabAPI: gitlabApi.
+	gitlabResource := GitlabResource new gitlabAPI: gitlabApi.
 
 	client stub post willReturn: response.
 
 	"When"
-	result := gitlabRessource post: endpoint withData: data.
+	result := gitlabResource post: endpoint withData: data.
 
 	"Then"
 	self assert: (result at: #message) equals: responseMessage.
@@ -353,9 +353,9 @@ GitlabRessourceTest >> testPostWithData [
 ]
 
 { #category : 'tests' }
-GitlabRessourceTest >> testPostWithFormData [
+GitlabResourceTest >> testPostWithFormData [
 
-	| hostUrl gitlabApi result client endpoint gitlabRessource data responseMessage response |
+	| hostUrl gitlabApi result client endpoint gitlabResource data responseMessage response |
 	"Given"
 	hostUrl := 'https://www.url.com'.
 	client := ZnClient new.
@@ -371,12 +371,12 @@ GitlabRessourceTest >> testPostWithFormData [
 	responseMessage := 'success'.
 	response := '{ "message": "' , responseMessage , '" }'.
 
-	gitlabRessource := GitlabRessource new gitlabAPI: gitlabApi.
+	gitlabResource := GitlabResource new gitlabAPI: gitlabApi.
 
 	client stub post willReturn: response.
 
 	"When"
-	result := gitlabRessource post: endpoint withFormData: data.
+	result := gitlabResource post: endpoint withFormData: data.
 
 	"Then"
 	self assert: (result at: #message) equals: responseMessage.

@@ -1,5 +1,5 @@
 Class {
-	#name : 'GitlabRessource',
+	#name : 'GitlabResource',
 	#superclass : 'Object',
 	#instVars : [
 		'gitlabAPI',
@@ -10,16 +10,17 @@ Class {
 }
 
 { #category : 'initialization' }
-GitlabRessource >> defaultPerPageItem [
+GitlabResource >> defaultPerPageItem [
 
 	^ 20
 ]
 
 { #category : 'api' }
-GitlabRessource >> get: endpoint withParams: paramsDict [
+GitlabResource >> get: endpoint withParams: paramsDict [
 
 	| response |
 	gitlabAPI client path: gitlabAPI hostUrl , endpoint.
+
 	paramsDict keysAndValuesDo: [ :key :value |
 		gitlabAPI client queryAt: key put: value ].
 
@@ -31,7 +32,7 @@ GitlabRessource >> get: endpoint withParams: paramsDict [
 ]
 
 { #category : 'api' }
-GitlabRessource >> getAll: endpoint withParams: paramsDict [
+GitlabResource >> getAll: endpoint withParams: paramsDict [
 
 	| currentPage results |
 	currentPage := 1.
@@ -61,7 +62,7 @@ GitlabRessource >> getAll: endpoint withParams: paramsDict [
 ]
 
 { #category : 'api' }
-GitlabRessource >> getByPage: page perPage: perPage from: endpoint withParams: paramsDict [
+GitlabResource >> getByPage: page perPage: perPage from: endpoint withParams: paramsDict [
 
 	| newParams |
 	newParams := Dictionary new.
@@ -75,19 +76,19 @@ GitlabRessource >> getByPage: page perPage: perPage from: endpoint withParams: p
 ]
 
 { #category : 'accessing' }
-GitlabRessource >> gitlabAPI: anObject [
+GitlabResource >> gitlabAPI: anObject [
 
 	gitlabAPI := anObject
 ]
 
 { #category : 'initialization' }
-GitlabRessource >> initialize [
+GitlabResource >> initialize [
 
 	itemPerPage := self defaultPerPageItem
 ]
 
 { #category : 'api' }
-GitlabRessource >> post: endpoint withData: data [
+GitlabResource >> post: endpoint withData: data [
 
 	| response |
 	gitlabAPI client path: gitlabAPI hostUrl , endpoint.
@@ -101,7 +102,7 @@ GitlabRessource >> post: endpoint withData: data [
 ]
 
 { #category : 'api' }
-GitlabRessource >> post: endpoint withFormData: data [
+GitlabResource >> post: endpoint withFormData: data [
 
 	| response |
 	gitlabAPI client path: gitlabAPI hostUrl , endpoint.
@@ -115,7 +116,7 @@ GitlabRessource >> post: endpoint withFormData: data [
 ]
 
 { #category : 'api' }
-GitlabRessource >> postJson: endpoint withData: data [
+GitlabResource >> postJson: endpoint withData: data [
 
 	| response |
 	gitlabAPI client path: gitlabAPI hostUrl , endpoint.
