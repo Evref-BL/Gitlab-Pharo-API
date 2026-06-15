@@ -115,3 +115,32 @@ GitlabJobsTest >> testGetByPagePerPageInProjectWithParams [
 	self assert: result size equals: 1.
 	self assert: result first equals: object
 ]
+
+{ #category : 'tests' }
+GitlabJobsTest >> testGetLogOfJobInProject [
+
+	| gitlabApi projectId jobId endpoint log gitlabJobs result |
+	"Given"
+	gitlabApi := GitlabApi new
+		             privateToken: 'token';
+		             hostUrl: 'https://www.url.com';
+		             client: ZnClient new.
+
+	projectId := 1.
+	jobId := 1.
+	log := String loremIpsum.
+
+	endpoint := '/projects/' , projectId asString , '/jobs/'
+	            , jobId asString , '/trace'.
+
+	gitlabJobs := GitlabJobs new gitlabAPI: gitlabApi.
+
+	(gitlabJobs stub getRaw: endpoint withParams: Dictionary empty)
+		willReturn: log.
+
+	"When"
+	result := gitlabJobs getLogOfJob: jobId inProject: projectId.
+
+	"Then"
+	self assert: result equals: log
+]

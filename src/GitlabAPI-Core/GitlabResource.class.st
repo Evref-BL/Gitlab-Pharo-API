@@ -19,12 +19,7 @@ GitlabResource >> defaultPerPageItem [
 GitlabResource >> get: endpoint withParams: paramsDict [
 
 	| response |
-	gitlabAPI client path: gitlabAPI hostUrl , endpoint.
-
-	paramsDict keysAndValuesDo: [ :key :value |
-		gitlabAPI client queryAt: key put: value ].
-
-	response := gitlabAPI client get.
+	response := self getRaw: endpoint withParams: paramsDict.
 
 	gitlabAPI output = 'json' ifTrue: [ ^ response ].
 
@@ -73,6 +68,17 @@ GitlabResource >> getByPage: page perPage: perPage from: endpoint withParams: pa
 		newParams at: key put: value ].
 
 	^ self get: endpoint withParams: newParams
+]
+
+{ #category : 'api' }
+GitlabResource >> getRaw: endpoint withParams: paramsDict [
+
+	gitlabAPI client path: gitlabAPI hostUrl , endpoint.
+
+	paramsDict keysAndValuesDo: [ :key :value |
+		gitlabAPI client queryAt: key put: value ].
+
+	^ gitlabAPI client get
 ]
 
 { #category : 'accessing' }

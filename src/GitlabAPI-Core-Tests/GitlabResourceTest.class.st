@@ -220,6 +220,38 @@ GitlabResourceTest >> testGetByPagePerPageFromWithParams [
 ]
 
 { #category : 'tests' }
+GitlabResourceTest >> testGetRawWithParams [
+
+	| hostUrl gitlabApi result client object rawObject endpoint gitlabResource params |
+	"Given"
+	hostUrl := 'https://www.url.com'.
+	client := ZnClient new.
+
+	gitlabApi := GitlabApi new
+		             privateToken: 'token';
+		             hostUrl: hostUrl;
+		             client: client.
+
+	endpoint := '/endpoint'.
+	params := { ('param' -> 'value') } asDictionary.
+
+	object := { (#id -> 1) } asDictionary.
+	rawObject := NeoJSONWriter toString: object.
+
+	gitlabResource := GitlabResource new gitlabAPI: gitlabApi.
+
+	client stub get willReturn: rawObject.
+
+	"When"
+	result := gitlabResource getRaw: endpoint withParams: params.
+
+	"Then"
+	self assert: result equals: rawObject.
+	params keysAndValuesDo: [ :key :value |
+		self assert: (client request url query at: key) equals: value ]
+]
+
+{ #category : 'tests' }
 GitlabResourceTest >> testGetWithParams [
 
 	| hostUrl gitlabApi result client object endpoint gitlabResource params |

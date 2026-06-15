@@ -62,3 +62,14 @@ GitlabJobs >> getByPage: page perPage: perPage inProject: projectId withParams: 
 		  from: '/projects/' , projectId asString , '/jobs'
 		  withParams: params
 ]
+
+{ #category : 'api' }
+GitlabJobs >> getLogOfJob: jobId inProject: projectId [
+	"https://docs.gitlab.com/api/jobs/#retrieve-a-log-file-for-a-job"
+
+	| endpoint |
+	endpoint := '/projects/' , projectId asString , '/jobs/'
+	            , jobId asString , '/trace'.
+
+	^ self getRaw: endpoint withParams: Dictionary empty
+]
