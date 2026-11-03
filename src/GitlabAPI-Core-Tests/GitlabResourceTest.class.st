@@ -317,7 +317,7 @@ GitlabResourceTest >> testGetWithParamsJSONOutput [
 { #category : 'tests' }
 GitlabResourceTest >> testPostJsonWithData [
 
-	| hostUrl gitlabApi result client endpoint gitlabResource data responseMessage response |
+	| hostUrl gitlabApi result client endpoint gitlabResource data responseMessage response sentEntity |
 	"Given"
 	hostUrl := 'https://www.url.com'.
 	client := ZnClient new.
@@ -335,7 +335,9 @@ GitlabResourceTest >> testPostJsonWithData [
 
 	gitlabResource := GitlabResource new gitlabAPI: gitlabApi.
 
-	client stub post willReturn: response.
+	client stub post will: [
+			sentEntity := client request entity.
+			response ].
 
 	"When"
 	result := gitlabResource postJson: endpoint withData: data.
@@ -343,11 +345,10 @@ GitlabResourceTest >> testPostJsonWithData [
 	"Then"
 	self assert: (result at: #message) equals: responseMessage.
 	self
-		assert: client request entity contentType asString
+		assert: sentEntity contentType asString
 		equals: 'application/json'.
-	self
-		assert: client request entity string
-		equals: (NeoJSONWriter toString: data)
+	self assert: sentEntity string equals: (NeoJSONWriter toString: data).
+	self deny: client request hasEntity
 ]
 
 { #category : 'tests' }
@@ -385,9 +386,44 @@ GitlabResourceTest >> testPostWithData [
 ]
 
 { #category : 'tests' }
+GitlabResourceTest >> testPostWithDataAfterPostJsonWithDataSendsNoEntity [
+
+	| hostUrl gitlabApi client gitlabResource response sentEntity |
+	"Given"
+	hostUrl := 'https://www.url.com'.
+	client := ZnClient new.
+
+	gitlabApi := GitlabApi new
+		             privateToken: 'token';
+		             hostUrl: hostUrl;
+		             client: client.
+
+	response := '{ "message": "success" }'.
+
+	gitlabResource := GitlabResource new gitlabAPI: gitlabApi.
+
+	client stub post willReturn: response.
+	gitlabResource
+		postJson: '/notes'
+		withData: { ('body' -> 'summary') } asDictionary.
+
+	client stub post will: [
+			sentEntity := client request entity.
+			response ].
+
+	"When"
+	gitlabResource
+		post: '/discussions'
+		withData: { ('body' -> 'suggestion') } asDictionary.
+
+	"Then"
+	self assert: sentEntity isNil
+]
+
+{ #category : 'tests' }
 GitlabResourceTest >> testPostWithFormData [
 
-	| hostUrl gitlabApi result client endpoint gitlabResource data responseMessage response |
+	| hostUrl gitlabApi result client endpoint gitlabResource data responseMessage response sentEntity |
 	"Given"
 	hostUrl := 'https://www.url.com'.
 	client := ZnClient new.
@@ -405,7 +441,9 @@ GitlabResourceTest >> testPostWithFormData [
 
 	gitlabResource := GitlabResource new gitlabAPI: gitlabApi.
 
-	client stub post willReturn: response.
+	client stub post will: [
+			sentEntity := client request entity.
+			response ].
 
 	"When"
 	result := gitlabResource post: endpoint withFormData: data.
@@ -413,15 +451,14 @@ GitlabResourceTest >> testPostWithFormData [
 	"Then"
 	self assert: (result at: #message) equals: responseMessage.
 	data keysAndValuesDo: [ :key :value |
-		self
-			assert: (client request entity fields at: key)
-			equals: (data at: key) ]
+		self assert: (sentEntity fields at: key) equals: (data at: key) ].
+	self deny: client request hasEntity
 ]
 
 { #category : 'tests' }
 GitlabResourceTest >> testPutJsonWithData [
 
-	| hostUrl gitlabApi result client endpoint gitlabResource data responseMessage response |
+	| hostUrl gitlabApi result client endpoint gitlabResource data responseMessage response sentEntity |
 	"Given"
 	hostUrl := 'https://www.url.com'.
 	client := ZnClient new.
@@ -439,7 +476,9 @@ GitlabResourceTest >> testPutJsonWithData [
 
 	gitlabResource := GitlabResource new gitlabAPI: gitlabApi.
 
-	client stub put willReturn: response.
+	client stub put will: [
+			sentEntity := client request entity.
+			response ].
 
 	"When"
 	result := gitlabResource putJson: endpoint withData: data.
@@ -447,9 +486,8 @@ GitlabResourceTest >> testPutJsonWithData [
 	"Then"
 	self assert: (result at: #message) equals: responseMessage.
 	self
-		assert: client request entity contentType asString
+		assert: sentEntity contentType asString
 		equals: 'application/json'.
-	self
-		assert: client request entity string
-		equals: (NeoJSONWriter toString: data)
+	self assert: sentEntity string equals: (NeoJSONWriter toString: data).
+	self deny: client request hasEntity
 ]
