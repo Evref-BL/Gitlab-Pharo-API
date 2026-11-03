@@ -107,7 +107,8 @@ GitlabNotesTest >> testCreateInMergeRequestOfProjectWithBody [
 
 	response := { (#message -> message) } asDictionary.
 
-	(gitlabNotes stub post: endpoint withData: data) willReturn: response.
+	(gitlabNotes stub postJson: endpoint withData: data) willReturn:
+		response.
 
 	"When"
 	result := gitlabNotes
@@ -117,4 +118,35 @@ GitlabNotesTest >> testCreateInMergeRequestOfProjectWithBody [
 
 	"Then"
 	self assert: (result at: #message) equals: (response at: #message)
+]
+
+{ #category : 'tests' }
+GitlabNotesTest >> testUpdateInMergeRequestOfProjectNoteWithBody [
+	"Given"
+
+	| hostUrl client gitlabApi response result gitlabNotes |
+	hostUrl := 'www.url.com'.
+	client := Mock new.
+
+	gitlabApi := GitlabApi new
+		             privateToken: 'token';
+		             hostUrl: hostUrl;
+		             client: client.
+	gitlabNotes := GitlabNotes new gitlabAPI: gitlabApi.
+
+	response := { (#body -> 'body') } asDictionary.
+
+	(gitlabNotes stub
+		 putJson: '/projects/1/merge_requests/2/notes/3'
+		 withData: { (#body -> 'body') } asDictionary) willReturn: response.
+
+	"When"
+	result := gitlabNotes
+		          updateInMergeRequest: 2
+		          ofProject: 1
+		          note: 3
+		          withBody: 'body'.
+
+	"Then"
+	self assert: result equals: response
 ]
