@@ -1,0 +1,26 @@
+src/GitlabAPI-Notes-Tests/GitlabNotesTest.class.st
+  s_42204bc251c4bb::t_859e00fe7e8a81 110-111,122-151
+  s_42204bc251c4bb::t_8a2865514add41 152
+src/GitlabAPI-Core/GitlabResource.class.st
+  s_42204bc251c4bb::t_859e00fe7e8a81 138-152
+src/GitlabAPI-Notes/GitlabNotes.class.st
+  s_42204bc251c4bb::t_859e00fe7e8a81 40-53
+src/GitlabAPI-Core-Tests/GitlabResourceTest.class.st
+  s_42204bc251c4bb::t_859e00fe7e8a81 420-455
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "84ef487e149c30ee32f399ea1af219baac03699c",
+  "prompts": {},
+  "sessions": {
+    "s_42204bc251c4bb": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "425092b8-3ff7-45c3-8f23-6105d8a45929",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Kilian B <60846047+knowbased@users.noreply.github.com>"
+    }
+  }
+}
