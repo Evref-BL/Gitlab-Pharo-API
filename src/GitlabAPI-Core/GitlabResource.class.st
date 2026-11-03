@@ -116,7 +116,8 @@ GitlabResource >> post: endpoint withFormData: data [
 	data keysAndValuesDo: [ :key :value |
 		gitlabAPI client formAt: key put: value ].
 
-	response := gitlabAPI client post.
+	response := [ gitlabAPI client post ] ensure: [
+		            gitlabAPI client resetEntity ].
 
 	^ NeoJSONReader fromString: response
 ]
@@ -131,7 +132,8 @@ GitlabResource >> postJson: endpoint withData: data [
 		(ZnEntity with: (NeoJSONWriter toString: data)).
 	gitlabAPI client contentType: 'application/json'.
 
-	response := gitlabAPI client post.
+	response := [ gitlabAPI client post ] ensure: [
+		            gitlabAPI client resetEntity ].
 
 	^ NeoJSONReader fromString: response
 ]
@@ -146,7 +148,8 @@ GitlabResource >> putJson: endpoint withData: data [
 		(ZnEntity with: (NeoJSONWriter toString: data)).
 	gitlabAPI client contentType: 'application/json'.
 
-	response := gitlabAPI client put.
+	response := [ gitlabAPI client put ] ensure: [
+		            gitlabAPI client resetEntity ].
 
 	^ NeoJSONReader fromString: response
 ]
