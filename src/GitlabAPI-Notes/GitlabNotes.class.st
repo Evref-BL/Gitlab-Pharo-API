@@ -37,5 +37,18 @@ GitlabNotes >> createInMergeRequest: mergeRequestIID ofProject: projectId withBo
 
 	data := { (#body -> body) } asDictionary.
 
-	^ self post: endpoint withData: data
+	^ self postJson: endpoint withData: data
+]
+
+{ #category : 'api' }
+GitlabNotes >> updateInMergeRequest: mergeRequestIID ofProject: projectId note: noteId withBody: body [
+	"https://docs.gitlab.com/api/notes/#modify-existing-merge-request-note"
+
+	| endpoint data |
+	endpoint := '/projects/' , projectId asString , '/merge_requests/'
+	            , mergeRequestIID asString , '/notes/' , noteId asString.
+
+	data := { (#body -> body) } asDictionary.
+
+	^ self putJson: endpoint withData: data
 ]
