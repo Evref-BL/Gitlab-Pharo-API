@@ -417,3 +417,39 @@ GitlabResourceTest >> testPostWithFormData [
 			assert: (client request entity fields at: key)
 			equals: (data at: key) ]
 ]
+
+{ #category : 'tests' }
+GitlabResourceTest >> testPutJsonWithData [
+
+	| hostUrl gitlabApi result client endpoint gitlabResource data responseMessage response |
+	"Given"
+	hostUrl := 'https://www.url.com'.
+	client := ZnClient new.
+
+	gitlabApi := GitlabApi new
+		             privateToken: 'token';
+		             hostUrl: hostUrl;
+		             client: client.
+
+	endpoint := '/endpoint'.
+	data := { ('param' -> 'value') } asDictionary.
+
+	responseMessage := 'success'.
+	response := '{ "message": "' , responseMessage , '" }'.
+
+	gitlabResource := GitlabResource new gitlabAPI: gitlabApi.
+
+	client stub put willReturn: response.
+
+	"When"
+	result := gitlabResource putJson: endpoint withData: data.
+
+	"Then"
+	self assert: (result at: #message) equals: responseMessage.
+	self
+		assert: client request entity contentType asString
+		equals: 'application/json'.
+	self
+		assert: client request entity string
+		equals: (NeoJSONWriter toString: data)
+]

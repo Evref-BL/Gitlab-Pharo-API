@@ -135,3 +135,18 @@ GitlabResource >> postJson: endpoint withData: data [
 
 	^ NeoJSONReader fromString: response
 ]
+
+{ #category : 'api' }
+GitlabResource >> putJson: endpoint withData: data [
+
+	| response |
+	gitlabAPI client path: gitlabAPI hostUrl , endpoint.
+
+	gitlabAPI client entity:
+		(ZnEntity with: (NeoJSONWriter toString: data)).
+	gitlabAPI client contentType: 'application/json'.
+
+	response := gitlabAPI client put.
+
+	^ NeoJSONReader fromString: response
+]
