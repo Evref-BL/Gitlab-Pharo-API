@@ -1,0 +1,19 @@
+.github/workflows/continuous.yml
+  s_5d72ec961d2bd1::t_0b19fbeaf37a85 20,33
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "4a65a0d70a98088678592f5e2d48e1016df4f47b",
+  "prompts": {},
+  "sessions": {
+    "s_5d72ec961d2bd1": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "959bdec7-ee3a-4393-83f2-6989e53357cc",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Kilian B <60846047+knowbased@users.noreply.github.com>"
+    }
+  }
+}
