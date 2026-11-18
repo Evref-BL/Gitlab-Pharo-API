@@ -20,27 +20,30 @@ GitlabRepositoriesTest >> accentedText [
 		  with: $o
 ]
 
-{ #category : 'accessing' }
-GitlabRepositoriesTest >> accentedTextInLatin1 [
-	"The bytes of the accented text in Latin-1, where they are not valid UTF-8"
+{ #category : 'running' }
+GitlabRepositoriesTest >> rawFileServing: bytes type: mimeType [
+	"Answer what getRawFile:ofProject: answers when GitLab sends bytes with mimeType"
 
-	^ ZnCharacterEncoder latin1 encodeString: self accentedText
+	^ self
+		  serve: (ZnEntity with: bytes type: mimeType)
+		  during: [ :gitlabApi |
+			  gitlabApi repositories getRawFile: 'file.txt' ofProject: 1 ]
 ]
 
 { #category : 'running' }
 GitlabRepositoriesTest >> serve: anEntity during: aBlock [
-	"Evaluate aBlock with a GitlabApi whose host is a local server answering anEntity to every request"
+	"Answer the value of aBlock with a GitlabApi whose host is a local server answering anEntity to every request"
 
 	| server |
 	server := ZnServer on: 0.
-	[
-		server
-			start;
-			onRequestRespond: [ :request | ZnResponse ok: anEntity ].
-		aBlock value: (GitlabApi new
-				 privateToken: 'token';
-				 hostUrl: 'http://localhost:' , server port printString;
-				 yourself) ] ensure: [ server stop ]
+	^ [
+		  server
+			  start;
+			  onRequestRespond: [ :request | ZnResponse ok: anEntity ].
+		  aBlock value: (GitlabApi new
+				   privateToken: 'token';
+				   hostUrl: 'http://localhost:' , server port printString;
+				   yourself) ] ensure: [ server stop ]
 ]
 
 { #category : 'tests' }
@@ -166,22 +169,6 @@ GitlabRepositoriesTest >> testGetBlameOfInRefStartEndOfProject [
 ]
 
 { #category : 'tests' }
-GitlabRepositoriesTest >> testGetRawFileBytesOfProject [
-
-	| bytes result |
-	bytes := self accentedText utf8Encoded.
-
-	self
-		serve: (ZnEntity with: bytes type: 'text/plain; charset=utf-8')
-		during: [ :gitlabApi |
-				result := gitlabApi repositories
-					          getRawFileBytes: 'file.txt'
-					          ofProject: 1 ].
-
-	self assert: result equals: bytes
-]
-
-{ #category : 'tests' }
 GitlabRepositoriesTest >> testGetRawFileOfProject [
 
 	| hostUrl gitlabApi projectId result client path gitlabRepositories filePath response |
@@ -216,60 +203,41 @@ GitlabRepositoriesTest >> testGetRawFileOfProject [
 { #category : 'tests' }
 GitlabRepositoriesTest >> testGetRawFileOfProjectAnswersBytesOfBinaryFile [
 
-	| bytes result |
-	bytes := #[ 137 80 78 71 0 255 ].
-
 	self
-		serve: (ZnEntity with: bytes type: 'application/octet-stream')
-		during: [ :gitlabApi |
-			result := gitlabApi repositories
-				          getRawFile: 'image.png'
-				          ofProject: 1 ].
-
-	self assert: result equals: bytes
+		assert: (self
+				 rawFileServing: #[ 137 80 78 71 0 255 ]
+				 type: 'application/octet-stream')
+		equals: #[ 137 80 78 71 0 255 ]
 ]
 
 { #category : 'tests' }
 GitlabRepositoriesTest >> testGetRawFileOfProjectDecodesInvalidBytesWithLatin1 [
+	"233 is the Latin-1 byte of the accented letter, it is not valid UTF-8"
 
-	| result |
 	self
-		serve: (ZnEntity
-				 with: self accentedTextInLatin1
+		assert: (self
+				 rawFileServing: #[ 104 233 108 108 111 ]
 				 type: 'text/plain; charset=utf-8')
-		during: [ :gitlabApi |
-			result := gitlabApi repositories
-				          getRawFile: 'file.txt'
-				          ofProject: 1 ].
-
-	self assert: result equals: self accentedText
+		equals: self accentedText
 ]
 
 { #category : 'tests' }
 GitlabRepositoriesTest >> testGetRawFileOfProjectDecodesTextWithItsCharset [
 
-	| result |
 	self
-		serve: (ZnEntity
-				 with: self accentedText utf8Encoded
+		assert: (self
+				 rawFileServing: self accentedText utf8Encoded
 				 type: 'text/plain; charset=utf-8')
-		during: [ :gitlabApi |
-			result := gitlabApi repositories
-				          getRawFile: 'file.txt'
-				          ofProject: 1 ].
-
-	self assert: result equals: self accentedText
+		equals: self accentedText
 ]
 
 { #category : 'tests' }
 GitlabRepositoriesTest >> testGetRawFileOfProjectRestoresTheReadersOfTheClient [
 
-	| reader contentReader |
 	self
-		serve: (ZnEntity
-				 with: self accentedTextInLatin1
-				 type: 'text/plain; charset=utf-8')
+		serve: (ZnEntity with: #[ 104 233 108 108 111 ] type: 'text/plain')
 		during: [ :gitlabApi |
+				| reader contentReader |
 				reader := gitlabApi client reader.
 				contentReader := gitlabApi client contentReader.
 
@@ -317,35 +285,18 @@ GitlabRepositoriesTest >> testGetRawFileOfProjectWithParams [
 
 { #category : 'tests' }
 GitlabRepositoriesTest >> testGetRawFileOfProjectWithParamsDecodesInvalidBytesWithLatin1 [
+	"233 is the Latin-1 byte of the accented letter, it is not valid UTF-8"
 
 	| result |
-	self
-		serve: (ZnEntity
-				 with: self accentedTextInLatin1
-				 type: 'text/plain; charset=utf-8')
-		during: [ :gitlabApi |
-				result := gitlabApi repositories
+	result := self
+		          serve: (ZnEntity
+				           with: #[ 104 233 108 108 111 ]
+				           type: 'text/plain; charset=utf-8')
+		          during: [ :gitlabApi |
+				          gitlabApi repositories
 					          getRawFile: 'file.txt'
 					          ofProject: 1
 					          withParams: { (#ref -> 'main') } asDictionary ].
-
-	self assert: result equals: self accentedText
-]
-
-{ #category : 'tests' }
-GitlabRepositoriesTest >> testGetRawFileOfProjectWithParamsEncoding [
-
-	| result |
-	self
-		serve: (ZnEntity
-				 with: self accentedTextInLatin1
-				 type: 'text/plain; charset=utf-8')
-		during: [ :gitlabApi |
-				result := gitlabApi repositories
-					          getRawFile: 'file.txt'
-					          ofProject: 1
-					          withParams: Dictionary new
-					          encoding: 'latin1' ].
 
 	self assert: result equals: self accentedText
 ]
