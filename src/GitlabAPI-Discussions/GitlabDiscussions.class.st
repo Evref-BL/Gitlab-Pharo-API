@@ -34,7 +34,7 @@ GitlabDiscussions >> get: discussionId inMergeRequest: mergeRequestIID ofProject
 
 { #category : 'api' }
 GitlabDiscussions >> getAllInMR: mergeRequestIID inProject: projectId [
-	"https://docs.gitlab.com/api/discussions/#list-project-merge-request-discussion-items. Every page"
+	"https://docs.gitlab.com/api/discussions/#list-project-merge-request-discussion-items"
 
 	| endpoint |
 	endpoint := '/projects/' , projectId asString , '/merge_requests/'
