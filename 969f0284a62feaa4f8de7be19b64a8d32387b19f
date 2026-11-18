@@ -1,0 +1,19 @@
+src/GitlabAPI-Discussions/GitlabDiscussions.class.st
+  s_b4db6078859b33::t_ba652113180313 48
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "969f0284a62feaa4f8de7be19b64a8d32387b19f",
+  "prompts": {},
+  "sessions": {
+    "s_b4db6078859b33": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ec25547d-9a4d-4a2f-bd6f-44bf56876f90",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Kilian B <60846047+knowbased@users.noreply.github.com>"
+    }
+  }
+}
