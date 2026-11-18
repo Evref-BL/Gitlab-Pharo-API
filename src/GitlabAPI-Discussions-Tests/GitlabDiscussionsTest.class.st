@@ -83,7 +83,8 @@ GitlabDiscussionsTest >> testGetAllInMRInProject [
 	endpoint := '/projects/' , projectId asString , '/merge_requests/'
 	            , mergeRequestIID asString , '/discussions'.
 
-	(gitlabDiscussions stub get: endpoint withParams: Dictionary new)
+	"Every page: a merge request can have more threads than one page holds"
+	(gitlabDiscussions stub getAll: endpoint withParams: Dictionary new)
 		willReturn: object3.
 
 	result := gitlabDiscussions
