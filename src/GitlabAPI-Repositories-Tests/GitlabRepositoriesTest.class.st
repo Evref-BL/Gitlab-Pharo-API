@@ -151,7 +151,8 @@ GitlabRepositoriesTest >> testGetRawFileOfProject [
 
 	path := '/projects/' , projectId asString , '/repository/files/'
 	        , filePath encodeFilePath , '/raw'.
-	(client stub get: hostUrl , path) willReturn: response.
+	(gitlabRepositories stub getFile: path withParams: Dictionary new)
+		willReturn: response.
 
 	"When"
 	result := gitlabRepositories

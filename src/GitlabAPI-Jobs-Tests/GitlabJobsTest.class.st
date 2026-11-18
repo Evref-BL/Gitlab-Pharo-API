@@ -135,7 +135,7 @@ GitlabJobsTest >> testGetLogOfJobInProject [
 
 	gitlabJobs := GitlabJobs new gitlabAPI: gitlabApi.
 
-	(gitlabJobs stub getRaw: endpoint withParams: Dictionary empty)
+	(gitlabJobs stub getFile: endpoint withParams: Dictionary empty)
 		willReturn: log.
 
 	"When"

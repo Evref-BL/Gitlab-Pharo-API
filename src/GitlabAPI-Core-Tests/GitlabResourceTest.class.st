@@ -8,6 +8,34 @@ Class {
 	#package : 'GitlabAPI-Core-Tests'
 }
 
+{ #category : 'running' }
+GitlabResourceTest >> fileServing: bytes type: mimeType [
+	"Answer what getFile:withParams: answers when GitLab sends bytes with mimeType"
+
+	^ self
+		  serve: (ZnEntity with: bytes type: mimeType)
+		  during: [ :gitlabApi |
+				  (GitlabResource new gitlabAPI: gitlabApi)
+					  getFile: '/file'
+					  withParams: Dictionary new ]
+]
+
+{ #category : 'running' }
+GitlabResourceTest >> serve: anEntity during: aBlock [
+	"Answer the value of aBlock with a GitlabApi whose host is a local server answering anEntity to every request"
+
+	| server |
+	server := ZnServer on: 0.
+	^ [
+		  server
+			  start;
+			  onRequestRespond: [ :request | ZnResponse ok: anEntity ].
+		  aBlock value: (GitlabApi new
+				   privateToken: 'token';
+				   hostUrl: 'http://localhost:' , server port printString;
+				   yourself) ] ensure: [ server stop ]
+]
+
 { #category : 'tests' }
 GitlabResourceTest >> testGetAllWithParams [
 
@@ -217,6 +245,61 @@ GitlabResourceTest >> testGetByPagePerPageFromWithParams [
 		equals: perPage asString.
 	self assert: result size equals: 1.
 	self assert: (result first at: #id) equals: objectId
+]
+
+{ #category : 'tests' }
+GitlabResourceTest >> testGetFileWithParamsAnswersBytesOfBinaryFile [
+
+	self
+		assert: (self
+				 fileServing: #[ 137 80 78 71 0 255 ]
+				 type: 'application/octet-stream')
+		equals: #[ 137 80 78 71 0 255 ]
+]
+
+{ #category : 'tests' }
+GitlabResourceTest >> testGetFileWithParamsDecodesInvalidUTF8WithLatin1 [
+	"233 is an accented e in Latin-1, it is not valid UTF-8"
+
+	self
+		assert: (self
+				 fileServing: #[ 104 233 108 108 111 ]
+				 type: 'text/plain; charset=utf-8')
+		equals: #[ 104 233 108 108 111 ] asString
+]
+
+{ #category : 'tests' }
+GitlabResourceTest >> testGetFileWithParamsDecodesUTF8 [
+
+	| text |
+	text := String with: $h with: (Character value: 233).
+
+	self
+		assert:
+		(self
+			 fileServing: text utf8Encoded
+			 type: 'text/plain; charset=utf-8')
+		equals: text
+]
+
+{ #category : 'tests' }
+GitlabResourceTest >> testGetFileWithParamsRestoresTheReadersOfTheClient [
+
+	self
+		serve: (ZnEntity with: #[ 104 233 ] type: 'text/plain')
+		during: [ :gitlabApi |
+				| reader contentReader |
+				reader := gitlabApi client reader.
+				contentReader := gitlabApi client contentReader.
+
+				(GitlabResource new gitlabAPI: gitlabApi)
+					getFile: '/file'
+					withParams: Dictionary new.
+
+				self assert: gitlabApi client reader identicalTo: reader.
+				self
+					assert: gitlabApi client contentReader
+					identicalTo: contentReader ]
 ]
 
 { #category : 'tests' }
