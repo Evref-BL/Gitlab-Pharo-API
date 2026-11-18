@@ -16,6 +16,13 @@ GitlabUsers >> allWithParams: paramsDict [
 ]
 
 { #category : 'api' }
+GitlabUsers >> current [
+	"https://docs.gitlab.com/api/users/#get-the-current-user"
+
+	^ self get: '/user' withParams: Dictionary new
+]
+
+{ #category : 'api' }
 GitlabUsers >> get: userId [
 	"https://docs.gitlab.com/ee/api/users.html#get-a-single-user"
 
