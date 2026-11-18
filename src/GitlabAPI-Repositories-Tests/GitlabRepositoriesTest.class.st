@@ -8,6 +8,41 @@ Class {
 	#package : 'GitlabAPI-Repositories-Tests'
 }
 
+{ #category : 'accessing' }
+GitlabRepositoriesTest >> accentedText [
+	"A text with a character that UTF-8 and Latin-1 encode differently"
+
+	^ String
+		  with: $h
+		  with: (Character value: 233)
+		  with: $l
+		  with: $l
+		  with: $o
+]
+
+{ #category : 'accessing' }
+GitlabRepositoriesTest >> accentedTextInLatin1 [
+	"The bytes of the accented text in Latin-1, where they are not valid UTF-8"
+
+	^ ZnCharacterEncoder latin1 encodeString: self accentedText
+]
+
+{ #category : 'running' }
+GitlabRepositoriesTest >> serve: anEntity during: aBlock [
+	"Evaluate aBlock with a GitlabApi whose host is a local server answering anEntity to every request"
+
+	| server |
+	server := ZnServer on: 0.
+	[
+		server
+			start;
+			onRequestRespond: [ :request | ZnResponse ok: anEntity ].
+		aBlock value: (GitlabApi new
+				 privateToken: 'token';
+				 hostUrl: 'http://localhost:' , server port printString;
+				 yourself) ] ensure: [ server stop ]
+]
+
 { #category : 'tests' }
 GitlabRepositoriesTest >> testCompareInProjectFromTo [
 
@@ -131,6 +166,22 @@ GitlabRepositoriesTest >> testGetBlameOfInRefStartEndOfProject [
 ]
 
 { #category : 'tests' }
+GitlabRepositoriesTest >> testGetRawFileBytesOfProject [
+
+	| bytes result |
+	bytes := self accentedText utf8Encoded.
+
+	self
+		serve: (ZnEntity with: bytes type: 'text/plain; charset=utf-8')
+		during: [ :gitlabApi |
+				result := gitlabApi repositories
+					          getRawFileBytes: 'file.txt'
+					          ofProject: 1 ].
+
+	self assert: result equals: bytes
+]
+
+{ #category : 'tests' }
 GitlabRepositoriesTest >> testGetRawFileOfProject [
 
 	| hostUrl gitlabApi projectId result client path gitlabRepositories filePath response |
@@ -160,6 +211,74 @@ GitlabRepositoriesTest >> testGetRawFileOfProject [
 
 	"Then"
 	self assert: result equals: response
+]
+
+{ #category : 'tests' }
+GitlabRepositoriesTest >> testGetRawFileOfProjectAnswersBytesOfBinaryFile [
+
+	| bytes result |
+	bytes := #[ 137 80 78 71 0 255 ].
+
+	self
+		serve: (ZnEntity with: bytes type: 'application/octet-stream')
+		during: [ :gitlabApi |
+			result := gitlabApi repositories
+				          getRawFile: 'image.png'
+				          ofProject: 1 ].
+
+	self assert: result equals: bytes
+]
+
+{ #category : 'tests' }
+GitlabRepositoriesTest >> testGetRawFileOfProjectDecodesInvalidBytesWithLatin1 [
+
+	| result |
+	self
+		serve: (ZnEntity
+				 with: self accentedTextInLatin1
+				 type: 'text/plain; charset=utf-8')
+		during: [ :gitlabApi |
+			result := gitlabApi repositories
+				          getRawFile: 'file.txt'
+				          ofProject: 1 ].
+
+	self assert: result equals: self accentedText
+]
+
+{ #category : 'tests' }
+GitlabRepositoriesTest >> testGetRawFileOfProjectDecodesTextWithItsCharset [
+
+	| result |
+	self
+		serve: (ZnEntity
+				 with: self accentedText utf8Encoded
+				 type: 'text/plain; charset=utf-8')
+		during: [ :gitlabApi |
+			result := gitlabApi repositories
+				          getRawFile: 'file.txt'
+				          ofProject: 1 ].
+
+	self assert: result equals: self accentedText
+]
+
+{ #category : 'tests' }
+GitlabRepositoriesTest >> testGetRawFileOfProjectRestoresTheReadersOfTheClient [
+
+	| reader contentReader |
+	self
+		serve: (ZnEntity
+				 with: self accentedTextInLatin1
+				 type: 'text/plain; charset=utf-8')
+		during: [ :gitlabApi |
+				reader := gitlabApi client reader.
+				contentReader := gitlabApi client contentReader.
+
+				gitlabApi repositories getRawFile: 'file.txt' ofProject: 1.
+
+				self assert: gitlabApi client reader identicalTo: reader.
+				self
+					assert: gitlabApi client contentReader
+					identicalTo: contentReader ]
 ]
 
 { #category : 'tests' }
@@ -194,6 +313,41 @@ GitlabRepositoriesTest >> testGetRawFileOfProjectWithParams [
 	self assert: result equals: response.
 	params keysAndValuesDo: [ :key :value |
 		self assert: (client request url query at: key) equals: value ]
+]
+
+{ #category : 'tests' }
+GitlabRepositoriesTest >> testGetRawFileOfProjectWithParamsDecodesInvalidBytesWithLatin1 [
+
+	| result |
+	self
+		serve: (ZnEntity
+				 with: self accentedTextInLatin1
+				 type: 'text/plain; charset=utf-8')
+		during: [ :gitlabApi |
+				result := gitlabApi repositories
+					          getRawFile: 'file.txt'
+					          ofProject: 1
+					          withParams: { (#ref -> 'main') } asDictionary ].
+
+	self assert: result equals: self accentedText
+]
+
+{ #category : 'tests' }
+GitlabRepositoriesTest >> testGetRawFileOfProjectWithParamsEncoding [
+
+	| result |
+	self
+		serve: (ZnEntity
+				 with: self accentedTextInLatin1
+				 type: 'text/plain; charset=utf-8')
+		during: [ :gitlabApi |
+				result := gitlabApi repositories
+					          getRawFile: 'file.txt'
+					          ofProject: 1
+					          withParams: Dictionary new
+					          encoding: 'latin1' ].
+
+	self assert: result equals: self accentedText
 ]
 
 { #category : 'tests' }
