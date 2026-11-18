@@ -71,5 +71,5 @@ GitlabJobs >> getLogOfJob: jobId inProject: projectId [
 	endpoint := '/projects/' , projectId asString , '/jobs/'
 	            , jobId asString , '/trace'.
 
-	^ self getRaw: endpoint withParams: Dictionary empty
+	^ self getFile: endpoint withParams: Dictionary empty
 ]
