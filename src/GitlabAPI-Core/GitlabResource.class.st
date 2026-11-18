@@ -9,6 +9,18 @@ Class {
 	#package : 'GitlabAPI-Core'
 }
 
+{ #category : 'private' }
+GitlabResource >> decodeFile: entity [
+	"Decode a text file as UTF-8, or as Latin-1 when it is not valid UTF-8,
+	since Latin-1 accepts any byte. Keep a binary file as bytes."
+
+	entity ifNil: [ ^ nil ].
+	entity contentType isBinary ifTrue: [ ^ entity bytes ].
+	^ [ entity bytes utf8Decoded ]
+		  on: ZnCharacterEncodingError
+		  do: [ entity bytes asString ]
+]
+
 { #category : 'initialization' }
 GitlabResource >> defaultPerPageItem [
 
@@ -68,6 +80,25 @@ GitlabResource >> getByPage: page perPage: perPage from: endpoint withParams: pa
 		newParams at: key put: value ].
 
 	^ self get: endpoint withParams: newParams
+]
+
+{ #category : 'api' }
+GitlabResource >> getFile: endpoint withParams: paramsDict [
+	"For an endpoint that answers a file instead of JSON, such as a raw file.
+	Answer a ByteArray for a binary file and a String for a text file, see #decodeFile:.
+	The client is shared by every resource, so put its readers back afterwards."
+
+	| client reader contentReader |
+	client := gitlabAPI client.
+	reader := client reader.
+	contentReader := client contentReader.
+	client
+		beBinary;
+		contentReader: [ :entity | self decodeFile: entity ].
+	^ [ self getRaw: endpoint withParams: paramsDict ] ensure: [
+			  client
+				  reader: reader;
+				  contentReader: contentReader ]
 ]
 
 { #category : 'api' }
