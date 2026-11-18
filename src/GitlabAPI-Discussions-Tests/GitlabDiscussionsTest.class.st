@@ -83,7 +83,7 @@ GitlabDiscussionsTest >> testGetAllInMRInProject [
 	endpoint := '/projects/' , projectId asString , '/merge_requests/'
 	            , mergeRequestIID asString , '/discussions'.
 
-	(gitlabDiscussions stub get: endpoint withParams: Dictionary new)
+	(gitlabDiscussions stub getAll: endpoint withParams: Dictionary new)
 		willReturn: object3.
 
 	result := gitlabDiscussions

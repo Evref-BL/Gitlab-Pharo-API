@@ -40,5 +40,5 @@ GitlabDiscussions >> getAllInMR: mergeRequestIID inProject: projectId [
 	endpoint := '/projects/' , projectId asString , '/merge_requests/'
 	            , mergeRequestIID asString , '/discussions'.
 
-	^ self get: endpoint withParams: Dictionary new
+	^ self getAll: endpoint withParams: Dictionary new
 ]
