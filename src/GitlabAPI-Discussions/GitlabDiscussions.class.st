@@ -42,3 +42,17 @@ GitlabDiscussions >> getAllInMR: mergeRequestIID inProject: projectId [
 
 	^ self get: endpoint withParams: Dictionary new
 ]
+
+{ #category : 'api' }
+GitlabDiscussions >> resolve: discussionId inMergeRequest: mergeRequestIID ofProject: projectId resolved: aBoolean [
+	"https://docs.gitlab.com/api/discussions/#resolve-a-merge-request-thread. false reopens the thread"
+
+	| endpoint |
+	endpoint := '/projects/' , projectId asString , '/merge_requests/'
+	            , mergeRequestIID asString , '/discussions/'
+	            , discussionId.
+
+	^ self
+		  putJson: endpoint
+		  withData: { (#resolved -> aBoolean) } asDictionary
+]
