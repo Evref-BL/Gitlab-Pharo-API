@@ -41,6 +41,26 @@ GitlabUsersTest >> testAllWithParams [
 ]
 
 { #category : 'tests' }
+GitlabUsersTest >> testCurrent [
+
+	| gitlabUsers user result |
+	"Given"
+	gitlabUsers := GitlabUsers new gitlabAPI: (GitlabApi new
+			                privateToken: 'token';
+			                hostUrl: 'https://www.url.com';
+			                client: ZnClient new).
+	user := { (#id -> 4) } asDictionary.
+	(gitlabUsers stub get: '/user' withParams: Dictionary new)
+		willReturn: user.
+
+	"When"
+	result := gitlabUsers current.
+
+	"Then"
+	self assert: result equals: user
+]
+
+{ #category : 'tests' }
 GitlabUsersTest >> testGet [
 
 	| hostUrl gitlabApi result client objectId object endpoint userId gitlabUsers |
