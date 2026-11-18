@@ -1,0 +1,21 @@
+src/GitlabAPI-Jobs-Tests/GitlabJobsTest.class.st
+  s_51ecad97e94162::t_c85e0bd4b31fd1 138
+src/GitlabAPI-Jobs/GitlabJobs.class.st
+  s_51ecad97e94162::t_fabfdfba91efc2 74
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "d52f5e268cca614117969e8ffb0e81e036d2d1dd",
+  "prompts": {},
+  "sessions": {
+    "s_51ecad97e94162": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "6870a9bf-d1ac-442b-a9bd-c3767ee6152c",
+        "model": "unknown"
+      },
+      "human_author": "Kilian B <60846047+knowbased@users.noreply.github.com>"
+    }
+  }
+}
