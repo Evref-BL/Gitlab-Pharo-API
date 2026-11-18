@@ -45,7 +45,7 @@ GitlabDiscussions >> getAllInMR: mergeRequestIID inProject: projectId [
 
 { #category : 'api' }
 GitlabDiscussions >> resolve: discussionId inMergeRequest: mergeRequestIID ofProject: projectId resolved: aBoolean [
-	"https://docs.gitlab.com/api/discussions/#resolve-a-merge-request-thread. false reopens the thread"
+	"https://docs.gitlab.com/api/discussions/#resolve-a-merge-request-thread"
 
 	| endpoint |
 	endpoint := '/projects/' , projectId asString , '/merge_requests/'
