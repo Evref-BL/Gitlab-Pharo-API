@@ -130,3 +130,29 @@ GitlabDiscussionsTest >> testGetInMergeRequestOfProject [
 
 	self assert: (result at: #id) equals: objectId
 ]
+
+{ #category : 'tests' }
+GitlabDiscussionsTest >> testResolveInMergeRequestOfProjectResolved [
+
+	| gitlabDiscussions response result |
+	"Given"
+	gitlabDiscussions := GitlabDiscussions new gitlabAPI: (GitlabApi new
+			                      privateToken: 'token';
+			                      hostUrl: 'https://www.url.com';
+			                      client: ZnClient new).
+	response := { (#id -> 'abc123') } asDictionary.
+	(gitlabDiscussions stub
+		 putJson: '/projects/1/merge_requests/2/discussions/abc123'
+		 withData: { (#resolved -> false) } asDictionary) willReturn:
+		response.
+
+	"When"
+	result := gitlabDiscussions
+		          resolve: 'abc123'
+		          inMergeRequest: 2
+		          ofProject: 1
+		          resolved: false.
+
+	"Then"
+	self assert: result equals: response
+]
