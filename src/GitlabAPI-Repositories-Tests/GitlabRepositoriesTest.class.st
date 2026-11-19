@@ -72,7 +72,7 @@ GitlabRepositoriesTest >> testGetBlameOfInRefOfProject [
 		            (#commit -> { (#id -> '15616510') } asDictionary) }
 		            asDictionary.
 	path := '/projects/' , projectId asString , '/repository/files/'
-	        , filePath encodeFilePath , '/blame'.
+	        , filePath urlEncoded , '/blame'.
 
 	(gitlabRepositories stub get: path withParams: params) willReturn:
 		response.
@@ -112,7 +112,7 @@ GitlabRepositoriesTest >> testGetBlameOfInRefStartEndOfProject [
 
 	projectId := 1.
 	path := '/projects/' , projectId asString , '/repository/files/'
-	        , filePath encodeFilePath , '/blame'.
+	        , filePath urlEncoded , '/blame'.
 	response := '[{"line":" some lines of code for this file ","commit":{"id":"123456"}}]'.
 
 	(gitlabRepositories stub get: path withParams: params) willReturn:
@@ -150,7 +150,7 @@ GitlabRepositoriesTest >> testGetRawFileOfProject [
 	response := 'content'.
 
 	path := '/projects/' , projectId asString , '/repository/files/'
-	        , filePath encodeFilePath , '/raw'.
+	        , filePath urlEncoded , '/raw'.
 	(gitlabRepositories stub getFile: path withParams: Dictionary new)
 		willReturn: response.
 
