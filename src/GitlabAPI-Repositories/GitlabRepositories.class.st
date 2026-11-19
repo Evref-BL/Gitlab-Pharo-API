@@ -25,7 +25,7 @@ GitlabRepositories >> getBlameOf: filePath inRef: ref ofProject: projectId [
 	| endpoint params |
 	params := { (#ref -> ref) } asDictionary.
 	endpoint := '/projects/' , projectId asString , '/repository/files/'
-	            , filePath encodeFilePath , '/blame'.
+	            , filePath urlEncoded , '/blame'.
 
 	^ self get: endpoint withParams: params
 ]
@@ -39,7 +39,7 @@ GitlabRepositories >> getBlameOf: filePath inRef: ref start: startRange end: end
 		          (#start -> startRange).
 		          (#end -> endRange) } asDictionary.
 	endpoint := '/projects/' , projectId asString , '/repository/files/'
-	            , filePath encodeFilePath , '/blame'.
+	            , filePath urlEncoded , '/blame'.
 
 	^ self get: endpoint withParams: params
 ]
@@ -60,7 +60,7 @@ GitlabRepositories >> getRawFile: filePath ofProject: projectId withParams: para
 
 	| endpoint |
 	endpoint := '/projects/' , projectId asString , '/repository/files/'
-	            , filePath encodeFilePath , '/raw'.
+	            , filePath urlEncoded , '/raw'.
 
 	^ self getFile: endpoint withParams: paramsDict
 ]
